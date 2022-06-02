@@ -1,1 +1,1 @@
-from .basic import basic_tool,DpSets
+from .basic import basic_tool,logChoose,dmvHyper2,dhyper,DpSets
