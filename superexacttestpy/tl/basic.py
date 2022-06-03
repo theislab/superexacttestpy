@@ -62,7 +62,6 @@ def dmvHyper2(x,nL,L,p,n,logp):
         if(i==1) : 
             l = x
             f1[0]=dhyper(x,l,n - l,L[nL - 1],i0)
-            #for l in range(x+1,min(minL,n+x-L[nL-1])+1): 
             for l in range(x+1,minL+1):
                 f1[l - x] = f1[l - x -1] * ((n - l+1-L[nL - 1] + x)/(l - x))  * (l/(n -l+1)) # I think my error is here 
         if(nL - i>=2):
@@ -79,18 +78,16 @@ def dmvHyper2(x,nL,L,p,n,logp):
         j=max(x,L[1]+L[0] - n)
         temp=dhyper(j,L[1],n - L[1],L[0],i0)
         p += temp * f1[j - x]
-        #print(p)
         for j in range(j+1,minL+1): 
             temp=temp * ((L[1]-j+1)/j) * ((L[0]-j+1) /(n - L[1]-L[0]+j))
             p += temp * f1[j - x]
-            #print(p)
 
     if (p > 1 and not logp) : 
         p = 1.0
     if ( p <= 0 ): 
         p = 2.2*10**308
     if(logp) and p > 0 :
-        p = math.log(p)
+        p = log(p)
     if (logp and p<= 0) :  
         p = 0
     return p 
