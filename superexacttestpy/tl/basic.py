@@ -48,49 +48,49 @@ def dmvHyper2(x,nL,L,p,n,logp):
     """Function to calculate the probability density of x elems in all of the subsets"""
     aSize=max(L) - x + 1
     minL=min(L)
-    f1=[]
-    f0=[]
+    f1=[0 for i in range(aSize)]
+    f0=[1 for i in range(aSize)]
     i0=0
 
     if(nL == 2):
         p=dhyper(x,L[0],n-L[0],L[1],logp)
         return p
-    for i in range(aSize) : 
-        f1.append(0)
-        f0.append(1) #To not multiply by 0 at the 69 lines 
+
     p=0
     #from inner-most to outer-most
-    for i in range(1,nL): 
+    for i in range(1,nL+1): 
         if(i==1) : 
             l = x
             f1[0]=dhyper(x,l,n - l,L[nL - 1],i0)
-            for l in range(x+1,min(minL,n+x-L[nL-1])): 
-                f1[l - x] = f1[l - x -1] * ((n - l+1-L[nL - 1] + x)/(l - x))  * (l/(n -l+1))
+            #for l in range(x+1,min(minL,n+x-L[nL-1])+1): 
+            for l in range(x+1,minL+1):
+                f1[l - x] = f1[l - x -1] * ((n - l+1-L[nL - 1] + x)/(l - x))  * (l/(n -l+1)) # I think my error is here 
         if(nL - i>=2):
-            for k in range(x,minL) : 
+            for k in range(x,minL+1) : 
                 f1[k - x]=0
                 l=max(x,k+L[nL - i] - n)
                 temp = dhyper(l,L[nL - i],n - L[nL - i],k,i0)
                 f1[k - x] += temp * f0[l - x]
-                for l in range(l+1,k): 
+                for l in range(l+1,k+1): 
                     temp = temp * ((L[nL - i]-l+1)/l) * ((k-l+1) /(n - L[nL - i]-k+l))
                     f1[k - x] += temp * f0[l - x]
-                    #print(k-x)
             
         #final integration
         j=max(x,L[1]+L[0] - n)
         temp=dhyper(j,L[1],n - L[1],L[0],i0)
         p += temp * f1[j - x]
-        for j in range(j+1,minL): 
+        #print(p)
+        for j in range(j+1,minL+1): 
             temp=temp * ((L[1]-j+1)/j) * ((L[0]-j+1) /(n - L[1]-L[0]+j))
             p += temp * f1[j - x]
+            #print(p)
 
     if (p > 1 and not logp) : 
         p = 1.0
-    if ( p < 0 ): 
+    if ( p <= 0 ): 
         p = 2.2*10**308
     if(logp) and p > 0 :
-        p = log(p)
+        p = math.log(p)
     if (logp and p<= 0) :  
         p = 0
     return p 
