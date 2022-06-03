@@ -99,17 +99,11 @@ def DpSets(x,data,n,logP=False):
     n (int): total number of gene 
     logP (bool): is the p value to return is log or not """
     l_data = len_data(data)
-    mini = min(l_data) 
     nL = len(data) # len of the dataset 
-    if mini < 0 or any(l_data)>n or any (l_data)<x  : 
-        if not logP : 
-            return 0 
-        print("invalid input")
-        return False 
     
     if nL < 2 :
         print("data should have at least 2 entries")
         return  False 
     
-    res = dmvHyper2(x=x,nL=len(data),L=len_data(data),n=n,p=0.0,logp=logP)
+    res = dmvHyper2(x=x,nL=len(data),L=l_data,n=n,p=0.0,logp=logP)
     return res
