@@ -93,6 +93,7 @@ def dmvHyper2(x,nL,L,p,n,logp):
         p = log(p)
     if (logp and p<= 0) :  
         p = 0
+    print(p)
     return p 
 
 def DpSets(x,data,n,logP=False): 
