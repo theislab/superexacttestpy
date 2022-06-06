@@ -1,5 +1,6 @@
 from anndata import AnnData
 from math import log,exp
+from copy import deepcopy
 
 
 def basic_tool(adata: AnnData) -> int:
@@ -44,26 +45,27 @@ def dhyper(x,w,b,n,logP):
 
     return res
 
-def dmvHyper2(x,nL,L,p,n,logp): 
+def dmvHyper(x,nL,L,p,n,logp): 
     """Function to calculate the probability density of x elems in all of the subsets"""
     aSize=max(L) - x + 1
     minL=min(L)
     f1=[0 for i in range(aSize)]
-    f0=[1 for i in range(aSize)]
     i0=0
 
     if(nL == 2):
         p=dhyper(x,L[0],n-L[0],L[1],logp)
         return p
-
+    for i in range(aSize) : 
+        f1.append(0)
     p=0
     #from inner-most to outer-most
     for i in range(1,nL+1): 
         if(i==1) : 
             l = x
             f1[0]=dhyper(x,l,n - l,L[nL - 1],i0)
-            for l in range(x+1,minL+1):
-                f1[l - x] = f1[l - x -1] * ((n - l+1-L[nL - 1] + x)/(l - x))  * (l/(n -l+1)) # I think my error is here 
+            for l in range(x+1,min(minL,n+x-L[nL-1])): 
+                f1[l - x] = f1[l - x -1] * ((n - l+1-L[nL - 1] + x)/(l - x))  * (l/(n -l+1))
+        f0 = deepcopy(f1)
         if(nL - i>=2):
             for k in range(x,minL+1) : 
                 f1[k - x]=0
@@ -99,11 +101,23 @@ def DpSets(x,data,n,logP=False):
     n (int): total number of gene 
     logP (bool): is the p value to return is log or not """
     l_data = len_data(data)
+    mini = min(l_data)
     nL = len(data) # len of the dataset 
+    for nb in l_data : 
+        if nb > n or nb < x : 
+            if not logP : 
+                return 0 
+            print("Invalid input")
+            return False 
+    if mini < 0 :
+        if not logP : 
+            return 0 
+        print("Invalid input")
+        return False 
     
     if nL < 2 :
         print("data should have at least 2 entries")
-        return  False 
+        return False 
     
-    res = dmvHyper2(x=x,nL=len(data),L=l_data,n=n,p=0.0,logp=logP)
+    res = dmvHyper(x=x,nL=len(data),L=len_data(data),n=n,p=0.0,logp=logP)
     return res
