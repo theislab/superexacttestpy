@@ -1,5 +1,6 @@
 from anndata import AnnData
 from math import log,exp
+from copy import deepcopy
 
 
 def basic_tool(adata: AnnData) -> int:
@@ -57,7 +58,6 @@ def dmvHyper2(x,nL,L,p,n,logp):
         return p
     for i in range(aSize) : 
         f1.append(0)
-        f0.append(1) #To not multiply by 0 at the 69 lines 
     p=0
     #from inner-most to outer-most
     for i in range(1,nL): 
@@ -66,6 +66,7 @@ def dmvHyper2(x,nL,L,p,n,logp):
             f1[0]=dhyper(x,l,n - l,L[nL - 1],i0)
             for l in range(x+1,min(minL,n+x-L[nL-1])): 
                 f1[l - x] = f1[l - x -1] * ((n - l+1-L[nL - 1] + x)/(l - x))  * (l/(n -l+1))
+        f0 = deepcopy(f1)
         if(nL - i>=2):
             for k in range(x,minL) : 
                 f1[k - x]=0
