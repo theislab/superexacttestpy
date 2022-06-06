@@ -45,7 +45,7 @@ def dhyper(x,w,b,n,logP):
 
     return res
 
-def dmvHyper2(x,nL,L,p,n,logp): 
+def dmvHyper(x,nL,L,p,n,logp): 
     """Function to calculate the probability density of x elems in all of the subsets"""
     aSize=max(L) - x + 1
     minL=min(L)
@@ -121,5 +121,5 @@ def DpSets(x,data,n,logP=False):
         print("data should have at least 2 entries")
         return False 
     
-    res = dmvHyper2(x=x,nL=len(data),L=len_data(data),n=n,p=0.0,logp=logP)
+    res = dmvHyper(x=x,nL=len(data),L=len_data(data),n=n,p=0.0,logp=logP)
     return res
