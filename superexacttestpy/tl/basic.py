@@ -304,3 +304,41 @@ def cpsets(x:int,data:list,n:int,lower_tail:bool=True,logp:bool=False,p_val_sim:
         return cpsets_sim(x,l_data,n,lower_tail,logp,p_val_sim,number_sim)
     res = pmvhyper(x,nL,l_data,n,0,lower_tail,logp)
     return res 
+
+def prod(data,total): 
+    """Function to calculate the multiplication of each item in the list divided by the total """ 
+    res=1 # bc if it's 0 0*anything = 0 
+    for i in range(len(data)):
+        res*=len(data[i])/total
+    return total*res 
+
+def mset (x:int,n:int,lower_tail:bool=True,logp:bool=False) :
+    """A wrapper to call cpsets
+    x (int): list of sets 
+    n (int): background size
+    lower_tail (bool): if TRUE (default), probability is P[overlap < m], otherwise, P[overlap >= m], where m is the number of elements shared by all sets.
+    logp (bool): if TRUE, probabilities p are given as log(p).
+    """
+    l_data = len_data(x)
+    L = [i/n for i in l_data]
+    if n < 1 :
+        print("invalid input")
+        return False
+    for nb in l_data : 
+        if nb>n or nb==0 : 
+            print("invalid input")
+            return False 
+
+    intersects=intersect(x)
+    Obs = len(intersects)
+    Exp = prod(x,n)
+    if Obs == 0 : 
+        if lower_tail: 
+            p = 0
+        else : 
+            p = 1
+     
+    else : 
+        p = cpsets(Obs-1,x,n,lower_tail,logp)
+    
+    return {"Intersection":intersects, "FE" : round(Obs/Exp,1), "p-value":p}
