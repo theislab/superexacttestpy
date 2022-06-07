@@ -331,7 +331,7 @@ def mset (x:int,n:int,lower_tail:bool=True,logp:bool=False) :
 
     intersects=intersect(x)
     Obs = len(intersects)
-    Exp = prod(x,total)
+    Exp = prod(x,n)
     if Obs == 0 : 
         if lower_tail: 
             p = 0
