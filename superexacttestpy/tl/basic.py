@@ -341,4 +341,4 @@ def mset (x:int,n:int,lower_tail:bool=True,logp:bool=False) :
     else : 
         p = cpsets(Obs-1,x,n,lower_tail,logp)
     
-    return {"Intersection":intersects, "FE" : Obs/Exp, "p-value":p}
+    return {"Intersection":intersects, "FE" : round(Obs/Exp,1), "p-value":p}
