@@ -121,3 +121,10 @@ def DpSets(x,data,n,logP=False):
     
     res = dmvHyper(x=x,nL=len(data),L=len_data(data),n=n,p=0.0,logp=logP)
     return res
+
+def intersect(data):
+    """Performs set intersection on multiple input vector"""
+    res=[list(set(data[0]).intersection(data[1]))]
+    for i in range(1,len(data)): # 1 bc we compute the first value in the initialisation
+        res.append(list(set(res[-1]).intersection(data[i])))
+    return res[-1]
