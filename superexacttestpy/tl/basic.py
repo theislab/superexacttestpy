@@ -3,6 +3,10 @@ from math import log,exp
 from copy import deepcopy
 from random import choices
 from collections import Counter
+import pandas as pd 
+from re import finditer
+from itertools import product
+
 
 
 def basic_tool(adata: AnnData) -> int:
@@ -341,3 +345,194 @@ def mset (x:int,n:int,lower_tail:bool=True,logp:bool=False) :
         p = cpsets(Obs-1,x,n,lower_tail,logp)
     
     return {"Intersection":intersects, "FE" : round(Obs/Exp,1), "p-value":p}
+
+def mkBarcode_degree(n,degree): 
+    res=[]
+
+    if degree == None : 
+        degree = [i for i in range(1,n+1)]
+
+    if type(degree) == list : 
+        for comb in product(["0","1"],repeat=n): 
+            tmp = list(comb)
+            if tmp.count('1') in degree:
+                res.append("".join(tmp)) 
+        return res
+
+    if type(degree)==int: 
+        if degree > n : 
+            print("Impossible")
+            return False
+        for comb in product(["0","1"],repeat= n) : 
+            tmp = list(comb)
+            if tmp.count('1')==degree:
+                res.append("".join(tmp)) 
+        return res
+
+    else : 
+        print("Degree should be a list of int of an int")
+        return False 
+
+def IncIntersect(x,degree:int) : 
+    if type(x) != list : 
+        print("Input data must be list")
+        return False 
+    nL = len(x)
+    if nL < 2 : 
+        print("Input data should have at least two entries")
+        return False 
+
+    barcodes=mkBarcode_degree(nL,degree)
+    otab = [0 for i in range(len(barcodes))]
+    d={}
+    for i in range(len(barcodes)) : 
+        i1 = [match.start() for match in finditer('1',barcodes[i])]
+        if len(i1) == 1 : 
+            otab[i] = len(x[i1[0]])
+        else : 
+            tmp=[]
+            for idx in i1 : 
+                tmp.append(x[idx])
+            otab[i] = len(intersect(tmp))
+        d[barcodes[i]]=[otab[i]]
+    return pd.DataFrame(d)
+
+def intersectElements(x): 
+    if type(x) != list : 
+        print("Input data must be list")
+        return False 
+    nL=len(x)
+    if(nL<2) : 
+        print('Input x should have at least two entries')
+    
+    x_all = []
+    for i in x : 
+        x_all += i
+    allE = list(set(x_all)) # get just the unique value
+
+    barcode=[]
+    for elem in allE : 
+        tmp=[]
+        for i in range(nL) : 
+            if elem in x[i] : 
+                tmp.append("1")
+            else : 
+                tmp.append("0")
+        barcode.append("".join(tmp))
+    return pd.DataFrame({"Entry":allE, "barcode":barcode})
+
+def exclusiveIntersect0(x): 
+    intersects=intersectElements(x)
+    nL = len(x)
+    barcode = mkBarcode_degree(nL,None)
+    otab = {}
+    for code in barcode : 
+        nb = intersects[intersects.barcode == code].shape[0]
+        otab[code]=[nb]
+    return pd.DataFrame(otab)
+
+def exc2incIntersect(df:pd.DataFrame): 
+    barcode=list(df.columns)
+    d={}
+    for code in barcode : 
+        i1 = [match.start() for match in finditer('1',code)]
+        nb=0
+
+        for code1 in barcode : 
+            i2 = [match.start() for match in finditer('1',code1)]
+            if all(i in i2 for i in i1) : 
+                nb += int(df[code1])
+        
+        d[code]=[nb]
+    return pd.DataFrame(d)
+
+def enumerateIntersectSizes(x,degree:int=-1) : 
+    if degree > 0 : 
+        return IncIntersect(x,degree)
+    otab=exclusiveIntersect0(x)
+    return exc2incIntersect(otab)
+
+def formating(barcode,names,collapse=' & '): 
+    res=[]
+    barcode = list(barcode)
+    for i in range(len(barcode)): 
+        if barcode[i] == "1" : 
+            res.append(names[i])
+    return collapse.join(res)
+
+def supertest(data,n:int,names:list,degree:int=-1): 
+    if type(data)!=list : 
+        print("Input must be a list")
+        return False
+    if len(names)!=len(data) : 
+        print("Please specify names for each list entry")
+        return False 
+    
+    x=data 
+    size=[len(list(set(x[i]))) for i in range(len(x))]
+    df_overlap_size = enumerateIntersectSizes(x,degree=degree)
+    
+    barcode=list(df_overlap_size.columns)
+    overlap_size=[int(df_overlap_size[code]) for code in barcode]
+
+    if n > 0 : 
+        for siz in size : 
+            if siz > n : 
+                print("Background population size should not be smaller than set size")
+                return False
+
+        overlap_expected=[None for i in df_overlap_size]
+        for i in range(df_overlap_size.size): 
+            nb = [match.start() for match in finditer('1',barcode[i])]
+            if len(nb) > 1 : 
+                overlap_expected[i]=n
+                for size_nb in nb : 
+                    overlap_expected[i] *= size[size_nb]/n
+            else : 
+                overlap_expected[i]=None
+
+        p_val=[0 for i in range(df_overlap_size.size)]
+        for idx,code in enumerate(barcode): 
+            i1 = [match.start() for match in finditer('1',code)]
+            if len(i1)==1 : 
+                p_val[idx] = None
+            elif overlap_size[idx]==0 :
+                p_val[idx]=1
+            else : 
+                L = [x[i] for i in i1]
+                p_val[idx]=cpsets(list(df_overlap_size.loc[0])[idx]-1,L,n,lower_tail=False)
+
+    nL = len(x)
+    
+    if degree > 0 : 
+        degree = [i for i in range(nL)]
+    if type(degree) == list : 
+        for d in degree : 
+            if d < 1 or d > nL : 
+                print("Invalid degree value")
+                return False 
+    odegree=[i.count('1') for i in barcode]
+    otab = exc2incIntersect(exclusiveIntersect0(x))
+    otab = [int(otab[code]) for code in barcode]
+    if len(otab)==0 : 
+        print("No data for output")
+        return None
+    etab=overlap_expected
+
+    el = intersectElements(x)
+    elements=[]
+    for i in barcode : 
+        tmp = []
+        for elem in el[el["barcode"]==i]["Entry"] : 
+            tmp.append(elem)
+        elements.append(", ".join(tmp))
+    
+    decode = []
+    for code in barcode : 
+        decode.append(formating(code,names))
+
+    FE = [otab[i]/etab[i] if etab[i]!= None and otab[i]!=None else None for i in range(len(etab))]
+
+    res = pd.DataFrame({"Intersection":decode,"degree":odegree,"Observed_overlap":otab,"Expected_overlap":etab,"FE":FE,"p-value":p_val,"Elements":elements})
+    res.index=barcode
+    return res
