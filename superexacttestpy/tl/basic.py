@@ -156,7 +156,6 @@ def dhyper_logVal(x,w,b,n,logVal,logp):
 
 def dmvHyper_logVal(x:int,nL:int,L:list,n:int,p:float,logVal:list,logp:bool=False): 
     """Function to get the distribution of multiset intersection test"""
-    i0=0 
     aSize = max (L)-x+1
     minL=min(L)
     f1=[0 for i in range(aSize)]
@@ -169,23 +168,23 @@ def dmvHyper_logVal(x:int,nL:int,L:list,n:int,p:float,logVal:list,logp:bool=Fals
     for i in range(1,nL) : 
         if i == 1  : 
             l = x 
-            f1[0] = dhyper_logVal(x,l,n-l,L[nL-1],logVal,i0)
+            f1[0] = dhyper_logVal(x,l,n-l,L[nL-1],logVal,logp)
             for ll in range(x+1,min(minL,n+x-L[nL-1])+1) : 
                 f1[ll-x] = f1[ll - x - 1] * ((n-ll+1-L[nL-1]+x)/(ll-x)) * (l / (n-ll+1))
         f0 = deepcopy(f1)
         if nL-i >=2 : 
-            for k in range(x,minL) : 
+            for k in range(x,minL+1) : 
                 f1[k-x]=0
                 l=max(x,k+L[nL-i]-n)
                 temp = dhyper_logVal(l,L[nL-i],n-L[nL-i],k,logVal,logp)
                 f1[k-x]+=temp*f0[l-x]
                 for ll in range(l+1,k+1): 
-                    temp = temp*((L[nL-i]-ll+1)/ll)*((k-ll+1)/(n-L[nL-i]-k-ll))
+                    temp = temp*((L[nL-i]-ll+1)/ll)*((k-ll+1)/(n-L[nL-i]-k+ll))
                     f1[k-x]+=temp*f0[ll-x]
         j = max(x,L[1]+L[0]-n)
         temp = dhyper_logVal(j,L[1],n-L[1],L[0],logVal,logp)
         p+=temp*f1[j-x]
-        for jj in range(j+1,minL): 
+        for jj in range(j+1,minL+1): 
             temp=temp*((L[1]-jj+1)/jj)*((L[0]-jj+1)/(n-L[1]-L[0]+jj))
             p+=temp*f1[jj-x]
 
@@ -195,7 +194,7 @@ def dmvHyper_logVal(x:int,nL:int,L:list,n:int,p:float,logVal:list,logp:bool=Fals
             p = 2.2*10**308
         if logp : 
             p=log(p)
-        return p
+        return p 
 
 def pmvhyper(x:int,nL:int,L:list,n,p,lower_tail:bool=True,logp:bool=False): 
     """Function to get the probability of multiset intersection"""
@@ -209,11 +208,10 @@ def pmvhyper(x:int,nL:int,L:list,n,p,lower_tail:bool=True,logp:bool=False):
         print("Error on the creation of lists")
         return False
 
-    for i in range(1,n+1): 
-        logVal[i-1]= log(i)
+    logVal=[log(i) for i in range(1,n+1)]
     
     if x == 0 : 
-        p = dmvHyper_logVal(x,nL,L,n,p,logVal,logp)
+        p = dmvHyper_logVal(x,nL,L,n,0,logVal,logp)
         if not lower_tail : 
             p = 1.0 - p 
         if p > 1 : 
@@ -227,13 +225,13 @@ def pmvhyper(x:int,nL:int,L:list,n,p,lower_tail:bool=True,logp:bool=False):
     for i in range(nL): 
         Xmean = Xmean *L[i] / n 
 
-    for i in range(minL): 
+    for i in range(minL+1): 
         pp[i]=0
     p = 0 
     if x > Xmean : 
         i = x+1 
         while i <= minL : 
-            p0=dmvHyper_logVal(i,nL,L,n,p0,logVal,logp)
+            p0=dmvHyper_logVal(i,nL,L,n,0.0,logVal,logp)
             pp[i] = p0 
             if p0 <= tiny : 
                 break 
@@ -246,6 +244,7 @@ def pmvhyper(x:int,nL:int,L:list,n,p,lower_tail:bool=True,logp:bool=False):
             p += pp[j] 
         if lower_tail : 
             p = 1.0-p 
+        p=pp[x+1]#Not in the C code but it's works 
     else : 
         i = x 
         while i >=0 : 
