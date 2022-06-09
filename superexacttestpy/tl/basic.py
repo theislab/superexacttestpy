@@ -460,14 +460,14 @@ def formating(barcode,names,collapse=' & '):
             res.append(names[i])
     return collapse.join(res)
 
-def supertest(data,n:int,names:list,degree:int=-1): 
+def supertest(data,n:int,names:list=[],degree:int=-1): 
     if type(data)!=list : 
         print("Input must be a list")
         return False
-    if len(names)!=len(data) : 
-        print("Please specify names for each list entry")
-        return False 
-    
+    if len(names)!=len(data) :
+        for i in range(len(data)): 
+            names.append(f"Set{i+1}")
+   
     x=data 
     size=[len(list(set(x[i]))) for i in range(len(x))]
     df_overlap_size = enumerateIntersectSizes(x,degree=degree)
@@ -500,17 +500,22 @@ def supertest(data,n:int,names:list,degree:int=-1):
                 p_val[idx]=1
             else : 
                 L = [x[i] for i in i1]
+                # print(cpsets(list(df_overlap_size.loc[0])[idx]-1,L,n))
                 p_val[idx]=cpsets(list(df_overlap_size.loc[0])[idx]-1,L,n,lower_tail=False)
 
     nL = len(x)
-    
-    if degree > 0 : 
-        degree = [i for i in range(nL)]
-    if type(degree) == list : 
+    if type(degree) == int : 
+        if degree <= 0 : 
+            degree = [i for i in range(nL)]
+
+    elif type(degree) == list : 
         for d in degree : 
             if d < 1 or d > nL : 
                 print("Invalid degree value")
-                return False 
+                return False
+    else : 
+        print("Degree should be a list of int or an int")
+        return False 
     odegree=[i.count('1') for i in barcode]
     otab = exc2incIntersect(exclusiveIntersect0(x))
     otab = [int(otab[code]) for code in barcode]
@@ -523,10 +528,18 @@ def supertest(data,n:int,names:list,degree:int=-1):
     elements=[]
     for i in barcode : 
         tmp = []
-        for elem in el[el["barcode"]==i]["Entry"] : 
+        ncode=len(barcode[0])
+        regex=""
+        for range_code in range(nL) :
+            if i[range_code] == "1" : 
+                regex+="1"
+            else: 
+                regex+="[01]"
+        for elem in el[el["barcode"].str.contains(regex)]["Entry"] :# Search if the barcode match with the regex and get the entry name. 
             tmp.append(elem)
+        tmp=sorted(tmp)
         elements.append(", ".join(tmp))
-    
+        
     decode = []
     for code in barcode : 
         decode.append(formating(code,names))
