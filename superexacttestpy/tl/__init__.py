@@ -17,5 +17,6 @@ from .basic import (
     exc2incIntersect,
     enumerateIntersectSizes,
     formating,
-    supertest
+    supertest,
+    decode
     )

@@ -8,7 +8,6 @@ from re import finditer
 from itertools import product
 
 
-
 def basic_tool(adata: AnnData) -> int:
     """Run a tool on the AnnData object."""
     print("Implement a tool to run on the AnnData object.")
@@ -200,18 +199,13 @@ def dmvHyper_logVal(x:int,nL:int,L:list,n:int,p:float,logVal:list,logp:bool=Fals
             p=log(p)
         return p 
 
-def pmvhyper(x:int,nL:int,L:list,n,p,lower_tail:bool=True,logp:bool=False): 
+def pmvhyper(x:int,nL:int,L:list,n,p,lower_tail:bool=False,logp:bool=False): 
     """Function to get the probability of multiset intersection"""
     tiny = 1.0*10**308
     i0=0
     p0=0.0
     minL = min(L)
     pp=[0 for i in range(minL+1)]
-    logVal = [0 for i in range(n)]
-    if pp == None or logVal == None : 
-        print("Error on the creation of lists")
-        return False
-
     logVal=[log(i) for i in range(1,n+1)]
     
     if x == 0 : 
@@ -237,34 +231,18 @@ def pmvhyper(x:int,nL:int,L:list,n,p,lower_tail:bool=True,logp:bool=False):
         while i <= minL : 
             p0=dmvHyper_logVal(i,nL,L,n,0.0,logVal,logp)
             pp[i] = p0 
+            if i > x+1 : 
+                break 
             if p0 <= tiny : 
                 break 
             if i > (x+1) and p0/pp[i-1]<=0.01 : 
                 break 
-            i+=1
-        if i > minL : 
-            i = minL 
-        for j in range(i,x+1,-1) : 
-            p += pp[j] 
-        if lower_tail : 
-            p = 1.0-p 
+            if i > x+1 : 
+                break 
+ 
         p=pp[x+1]#Not in the C code but it's works 
-    else : 
-        i = x 
-        while i >=0 : 
-            p0 = dmvHyper_logVal(i,nL,L,n,p0,logVal,logp)
-            pp[i]=p0
-            if p0 <= tiny : 
-                break
-            if i < x and (p0/pp[i+1])<0.01 : 
-                break
-            i-=1
-        if i < 0 :
-            i == 0 
-        for j in range(i,x+1): 
-            p+=pp[j]
-        if not lower_tail : 
-            p = 1.0 - p 
+    if not lower_tail : 
+        p = 1-p
     if p > 1 : 
         p == 1.0
     if p < 0 : 
@@ -460,7 +438,7 @@ def formating(barcode,names,collapse=' & '):
             res.append(names[i])
     return collapse.join(res)
 
-def supertest(data,n:int,names:list=[],degree:int=-1): 
+def supertest(data,n:int,names:list=[],degree:int=-1,lower_tail=False): 
     if type(data)!=list : 
         print("Input must be a list")
         return False
@@ -501,7 +479,7 @@ def supertest(data,n:int,names:list=[],degree:int=-1):
             else : 
                 L = [x[i] for i in i1]
                 # print(cpsets(list(df_overlap_size.loc[0])[idx]-1,L,n))
-                p_val[idx]=cpsets(list(df_overlap_size.loc[0])[idx]-1,L,n,lower_tail=False)
+                p_val[idx]=cpsets(list(df_overlap_size.loc[0])[idx]-1,L,n,lower_tail=lower_tail)
 
     nL = len(x)
     if type(degree) == int : 
@@ -549,3 +527,13 @@ def supertest(data,n:int,names:list=[],degree:int=-1):
     res = pd.DataFrame({"Intersection":decode,"degree":odegree,"Observed_overlap":otab,"Expected_overlap":etab,"FE":FE,"p-value":p_val,"Elements":elements})
     res.index=barcode
     return res
+
+def decode(barcode,name): 
+    res_pres = []
+    res_abs= []
+    for i in range(len(list(barcode))) :
+        if barcode[i] == "1" : 
+            res_pres.append(name[i])
+        else : 
+            res_abs.append(name[i])
+    return res_pres, res_abs
