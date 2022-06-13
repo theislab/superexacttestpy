@@ -6,9 +6,6 @@ from collections import Counter
 import pandas as pd 
 from re import finditer
 from itertools import product
-import upsetplot as upset
-import matplotlib as mp  
-import matplotlib.pyplot as plt
 
 
 def basic_tool(adata: AnnData) -> int:
