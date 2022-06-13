@@ -23,7 +23,7 @@ def color_map_color(value, cmap_name='YlOrRd', vmin=0, vmax=1):
     color = rgb2hex(rgb)
     return color
 
-def plot(data:list,n:int,name:list,degree=-1,sort_by="degree",show_count=True,orientation:str="horizontal",color_p_val:bool=True,size:tuple=(10,5)) :
+def plot(data:list,n:int,name:list,degree=-1,sort_by="degree",show_count=True,orientation:str="horizontal",color_p_val:bool=True,size:tuple=(10,5),background_color:str="dark_background") :
     """
         data (list) : list of sets 
         n : background size 
@@ -33,6 +33,7 @@ def plot(data:list,n:int,name:list,degree=-1,sort_by="degree",show_count=True,or
         orientation (str) : horizontal or vertical
         color_p_val (bool): Coloration of bars with their p-value
         show_elements (bool) : The element of each intersection is show
+        background_color (str) : Set the backgrund color : default = "dark_background" other possibility : "white","blue",...
     """ 
     if type(degree)==list: 
         df = stest.tl.supertest(data,n,name,degree=-1,lower_tail=True)
@@ -86,6 +87,6 @@ def plot(data:list,n:int,name:list,degree=-1,sort_by="degree",show_count=True,or
             pres,abs=stest.tl.decode(val,name)
             res.style_subsets(present = pres, absent=abs,facecolor=col,label=f"-log10(p_value) = {p_val[i]}")
             res.style_subsets()
-    with plt.style.context ("dark_background"):
+    with plt.style.context(background_color):
         res.plot(fig)
         # fig.show()
