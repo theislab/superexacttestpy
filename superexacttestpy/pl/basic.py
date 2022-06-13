@@ -23,7 +23,7 @@ def color_map_color(value, cmap_name='YlOrRd', vmin=0, vmax=1):
     color = rgb2hex(rgb)
     return color
 
-def plot(data:list,n:int,name:list,degree=-1,sort_by="degree",show_count=True,orientation:str="horizontal",color_p_val:bool=True,show_elements:bool=True,size:tuple=(10,5)) :
+def plot(data:list,n:int,name:list,degree=-1,sort_by="degree",show_count=True,orientation:str="horizontal",color_p_val:bool=True,size:tuple=(10,5)) :
     """
         data (list) : list of sets 
         n : background size 
