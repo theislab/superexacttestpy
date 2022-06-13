@@ -6,7 +6,9 @@ from collections import Counter
 import pandas as pd 
 from re import finditer
 from itertools import product
-
+import upsetplot as upset
+import matplotlib as mp  
+import matplotlib.pyplot as plt
 
 
 def basic_tool(adata: AnnData) -> int:
@@ -439,7 +441,7 @@ def formating(barcode,names,collapse=' & '):
             res.append(names[i])
     return collapse.join(res)
 
-def supertest(data,n:int,names:list=[],degree:int=-1): 
+def supertest(data,n:int,names:list=[],degree:int=-1,lower_tail=False): 
     if type(data)!=list : 
         print("Input must be a list")
         return False
@@ -480,7 +482,7 @@ def supertest(data,n:int,names:list=[],degree:int=-1):
             else : 
                 L = [x[i] for i in i1]
                 # print(cpsets(list(df_overlap_size.loc[0])[idx]-1,L,n))
-                p_val[idx]=cpsets(list(df_overlap_size.loc[0])[idx]-1,L,n,lower_tail=False)
+                p_val[idx]=cpsets(list(df_overlap_size.loc[0])[idx]-1,L,n,lower_tail=lower_tail)
 
     nL = len(x)
     if type(degree) == int : 
@@ -528,3 +530,22 @@ def supertest(data,n:int,names:list=[],degree:int=-1):
     res = pd.DataFrame({"Intersection":decode,"degree":odegree,"Observed_overlap":otab,"Expected_overlap":etab,"FE":FE,"p-value":p_val,"Elements":elements})
     res.index=barcode
     return res
+
+def color_map_color(value, cmap_name='YlOrRd', vmin=0, vmax=1):
+    if value == 0 : 
+        return '#CACACA'
+    norm = mp.colors.Normalize(vmin=vmin, vmax=vmax)
+    cmap = mp.cm.get_cmap(cmap_name)  # PiYG
+    rgb = cmap(norm(abs(value)))[:3]  # will return rgba, we take only first 3 so we get rgb
+    color = mp.colors.rgb2hex(rgb)
+    return color
+
+def decode(barcode,name): 
+    res_pres = []
+    res_abs= []
+    for i in range(len(list(barcode))) :
+        if barcode[i] == "1" : 
+            res_pres.append(name[i])
+        else : 
+            res_abs.append(name[i])
+    return res_pres, res_abs
