@@ -88,4 +88,4 @@ def plot(data:list,n:int,name:list,degree=-1,sort_by="degree",show_count=True,or
             res.style_subsets()
     with plt.style.context ("dark_background"):
         res.plot(fig)
-        fig.show()
+        # fig.show()
