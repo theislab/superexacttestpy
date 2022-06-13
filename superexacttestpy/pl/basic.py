@@ -68,7 +68,10 @@ def plot(data:list,n:int,name:list,degree=-1,sort_by="degree",show_count=True,or
         show_count=None
 
     #Construct the plot 
-    res=upset.UpSet(plot_data,orientation=orientation,sort_by=sort_by,show_counts=show_count,intersection_plot_elements=20,subset_size="auto",facecolor='white')
+    if background_color != "dark_background" : 
+        res=upset.UpSet(plot_data,orientation=orientation,sort_by=sort_by,show_counts=show_count,intersection_plot_elements=20,subset_size="auto")
+    else : 
+        res=upset.UpSet(plot_data,orientation=orientation,sort_by=sort_by,show_counts=show_count,intersection_plot_elements=20,subset_size="auto",facecolor='white')
     if color_p_val : 
         p_val=[]
         for code in list(df.index):
