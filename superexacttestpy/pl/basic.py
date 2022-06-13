@@ -86,6 +86,6 @@ def plot(data:list,n:int,name:list,degree=-1,sort_by="degree",show_count=True,or
             pres,abs=stest.tl.decode(val,name)
             res.style_subsets(present = pres, absent=abs,facecolor=col,label=f"-log10(p_value) = {p_val[i]}")
             res.style_subsets()
-
-    res.plot(fig)
-    fig.show()
+    with plt.style.context ("dark_background"):
+        res.plot(fig)
+        fig.show()
