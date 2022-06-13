@@ -33,7 +33,7 @@ def plot(data:list,n:int,name:list,degree=-1,sort_by="degree",show_count=True,or
         orientation (str) : horizontal or vertical
         color_p_val (bool): Coloration of bars with their p-value
         show_elements (bool) : The element of each intersection is show
-        background_color (str) : Set the backgrund color : default = "dark_background" other possibility : "white","blue",...
+        background_color (str) : Set the backgrund color : default = "dark_background" other possibility : see `style.available` for list of available styles
     """ 
     if type(degree)==list: 
         df = stest.tl.supertest(data,n,name,degree=-1,lower_tail=True)
