@@ -3,6 +3,10 @@ from math import log,exp
 from copy import deepcopy
 from random import choices
 from collections import Counter
+import pandas as pd 
+from re import finditer
+from itertools import product
+
 
 
 def basic_tool(adata: AnnData) -> int:
@@ -156,7 +160,6 @@ def dhyper_logVal(x,w,b,n,logVal,logp):
 
 def dmvHyper_logVal(x:int,nL:int,L:list,n:int,p:float,logVal:list,logp:bool=False): 
     """Function to get the distribution of multiset intersection test"""
-    i0=0 
     aSize = max (L)-x+1
     minL=min(L)
     f1=[0 for i in range(aSize)]
@@ -169,23 +172,23 @@ def dmvHyper_logVal(x:int,nL:int,L:list,n:int,p:float,logVal:list,logp:bool=Fals
     for i in range(1,nL) : 
         if i == 1  : 
             l = x 
-            f1[0] = dhyper_logVal(x,l,n-l,L[nL-1],logVal,i0)
+            f1[0] = dhyper_logVal(x,l,n-l,L[nL-1],logVal,logp)
             for ll in range(x+1,min(minL,n+x-L[nL-1])+1) : 
                 f1[ll-x] = f1[ll - x - 1] * ((n-ll+1-L[nL-1]+x)/(ll-x)) * (l / (n-ll+1))
         f0 = deepcopy(f1)
         if nL-i >=2 : 
-            for k in range(x,minL) : 
+            for k in range(x,minL+1) : 
                 f1[k-x]=0
                 l=max(x,k+L[nL-i]-n)
                 temp = dhyper_logVal(l,L[nL-i],n-L[nL-i],k,logVal,logp)
                 f1[k-x]+=temp*f0[l-x]
                 for ll in range(l+1,k+1): 
-                    temp = temp*((L[nL-i]-ll+1)/ll)*((k-ll+1)/(n-L[nL-i]-k-ll))
+                    temp = temp*((L[nL-i]-ll+1)/ll)*((k-ll+1)/(n-L[nL-i]-k+ll))
                     f1[k-x]+=temp*f0[ll-x]
         j = max(x,L[1]+L[0]-n)
         temp = dhyper_logVal(j,L[1],n-L[1],L[0],logVal,logp)
         p+=temp*f1[j-x]
-        for jj in range(j+1,minL): 
+        for jj in range(j+1,minL+1): 
             temp=temp*((L[1]-jj+1)/jj)*((L[0]-jj+1)/(n-L[1]-L[0]+jj))
             p+=temp*f1[jj-x]
 
@@ -195,7 +198,7 @@ def dmvHyper_logVal(x:int,nL:int,L:list,n:int,p:float,logVal:list,logp:bool=Fals
             p = 2.2*10**308
         if logp : 
             p=log(p)
-        return p
+        return p 
 
 def pmvhyper(x:int,nL:int,L:list,n,p,lower_tail:bool=True,logp:bool=False): 
     """Function to get the probability of multiset intersection"""
@@ -209,11 +212,10 @@ def pmvhyper(x:int,nL:int,L:list,n,p,lower_tail:bool=True,logp:bool=False):
         print("Error on the creation of lists")
         return False
 
-    for i in range(1,n+1): 
-        logVal[i-1]= log(i)
+    logVal=[log(i) for i in range(1,n+1)]
     
     if x == 0 : 
-        p = dmvHyper_logVal(x,nL,L,n,p,logVal,logp)
+        p = dmvHyper_logVal(x,nL,L,n,0,logVal,logp)
         if not lower_tail : 
             p = 1.0 - p 
         if p > 1 : 
@@ -227,13 +229,13 @@ def pmvhyper(x:int,nL:int,L:list,n,p,lower_tail:bool=True,logp:bool=False):
     for i in range(nL): 
         Xmean = Xmean *L[i] / n 
 
-    for i in range(minL): 
+    for i in range(minL+1): 
         pp[i]=0
     p = 0 
     if x > Xmean : 
         i = x+1 
         while i <= minL : 
-            p0=dmvHyper_logVal(i,nL,L,n,p0,logVal,logp)
+            p0=dmvHyper_logVal(i,nL,L,n,0.0,logVal,logp)
             pp[i] = p0 
             if p0 <= tiny : 
                 break 
@@ -246,6 +248,7 @@ def pmvhyper(x:int,nL:int,L:list,n,p,lower_tail:bool=True,logp:bool=False):
             p += pp[j] 
         if lower_tail : 
             p = 1.0-p 
+        p=pp[x+1]#Not in the C code but it's works 
     else : 
         i = x 
         while i >=0 : 
@@ -342,3 +345,207 @@ def mset (x:int,n:int,lower_tail:bool=True,logp:bool=False) :
         p = cpsets(Obs-1,x,n,lower_tail,logp)
     
     return {"Intersection":intersects, "FE" : round(Obs/Exp,1), "p-value":p}
+
+def mkBarcode_degree(n,degree): 
+    res=[]
+
+    if degree == None : 
+        degree = [i for i in range(1,n+1)]
+
+    if type(degree) == list : 
+        for comb in product(["0","1"],repeat=n): 
+            tmp = list(comb)
+            if tmp.count('1') in degree:
+                res.append("".join(tmp)) 
+        return res
+
+    if type(degree)==int: 
+        if degree > n : 
+            print("Impossible")
+            return False
+        for comb in product(["0","1"],repeat= n) : 
+            tmp = list(comb)
+            if tmp.count('1')==degree:
+                res.append("".join(tmp)) 
+        return res
+
+    else : 
+        print("Degree should be a list of int of an int")
+        return False 
+
+def IncIntersect(x,degree:int) : 
+    if type(x) != list : 
+        print("Input data must be list")
+        return False 
+    nL = len(x)
+    if nL < 2 : 
+        print("Input data should have at least two entries")
+        return False 
+
+    barcodes=mkBarcode_degree(nL,degree)
+    otab = [0 for i in range(len(barcodes))]
+    d={}
+    for i in range(len(barcodes)) : 
+        i1 = [match.start() for match in finditer('1',barcodes[i])]
+        if len(i1) == 1 : 
+            otab[i] = len(x[i1[0]])
+        else : 
+            tmp=[]
+            for idx in i1 : 
+                tmp.append(x[idx])
+            otab[i] = len(intersect(tmp))
+        d[barcodes[i]]=[otab[i]]
+    return pd.DataFrame(d)
+
+def intersectElements(x): 
+    if type(x) != list : 
+        print("Input data must be list")
+        return False 
+    nL=len(x)
+    if(nL<2) : 
+        print('Input x should have at least two entries')
+    
+    x_all = []
+    for i in x : 
+        x_all += i
+    allE = list(set(x_all)) # get just the unique value
+
+    barcode=[]
+    for elem in allE : 
+        tmp=[]
+        for i in range(nL) : 
+            if elem in x[i] : 
+                tmp.append("1")
+            else : 
+                tmp.append("0")
+        barcode.append("".join(tmp))
+    return pd.DataFrame({"Entry":allE, "barcode":barcode})
+
+def exclusiveIntersect0(x): 
+    intersects=intersectElements(x)
+    nL = len(x)
+    barcode = mkBarcode_degree(nL,None)
+    otab = {}
+    for code in barcode : 
+        nb = intersects[intersects.barcode == code].shape[0]
+        otab[code]=[nb]
+    return pd.DataFrame(otab)
+
+def exc2incIntersect(df:pd.DataFrame): 
+    barcode=list(df.columns)
+    d={}
+    for code in barcode : 
+        i1 = [match.start() for match in finditer('1',code)]
+        nb=0
+
+        for code1 in barcode : 
+            i2 = [match.start() for match in finditer('1',code1)]
+            if all(i in i2 for i in i1) : 
+                nb += int(df[code1])
+        
+        d[code]=[nb]
+    return pd.DataFrame(d)
+
+def enumerateIntersectSizes(x,degree:int=-1) : 
+    if degree > 0 : 
+        return IncIntersect(x,degree)
+    otab=exclusiveIntersect0(x)
+    return exc2incIntersect(otab)
+
+def formating(barcode,names,collapse=' & '): 
+    res=[]
+    barcode = list(barcode)
+    for i in range(len(barcode)): 
+        if barcode[i] == "1" : 
+            res.append(names[i])
+    return collapse.join(res)
+
+def supertest(data,n:int,names:list=[],degree:int=-1): 
+    if type(data)!=list : 
+        print("Input must be a list")
+        return False
+    if len(names)!=len(data) :
+        for i in range(len(data)): 
+            names.append(f"Set{i+1}")
+   
+    x=data 
+    size=[len(list(set(x[i]))) for i in range(len(x))]
+    df_overlap_size = enumerateIntersectSizes(x,degree=degree)
+    
+    barcode=list(df_overlap_size.columns)
+    overlap_size=[int(df_overlap_size[code]) for code in barcode]
+
+    if n > 0 : 
+        for siz in size : 
+            if siz > n : 
+                print("Background population size should not be smaller than set size")
+                return False
+
+        overlap_expected=[None for i in df_overlap_size]
+        for i in range(df_overlap_size.size): 
+            nb = [match.start() for match in finditer('1',barcode[i])]
+            if len(nb) > 1 : 
+                overlap_expected[i]=n
+                for size_nb in nb : 
+                    overlap_expected[i] *= size[size_nb]/n
+            else : 
+                overlap_expected[i]=None
+
+        p_val=[0 for i in range(df_overlap_size.size)]
+        for idx,code in enumerate(barcode): 
+            i1 = [match.start() for match in finditer('1',code)]
+            if len(i1)==1 : 
+                p_val[idx] = None
+            elif overlap_size[idx]==0 :
+                p_val[idx]=1
+            else : 
+                L = [x[i] for i in i1]
+                # print(cpsets(list(df_overlap_size.loc[0])[idx]-1,L,n))
+                p_val[idx]=cpsets(list(df_overlap_size.loc[0])[idx]-1,L,n,lower_tail=False)
+
+    nL = len(x)
+    if type(degree) == int : 
+        if degree <= 0 : 
+            degree = [i for i in range(nL)]
+
+    elif type(degree) == list : 
+        for d in degree : 
+            if d < 1 or d > nL : 
+                print("Invalid degree value")
+                return False
+    else : 
+        print("Degree should be a list of int or an int")
+        return False 
+    odegree=[i.count('1') for i in barcode]
+    otab = exc2incIntersect(exclusiveIntersect0(x))
+    otab = [int(otab[code]) for code in barcode]
+    if len(otab)==0 : 
+        print("No data for output")
+        return None
+    etab=overlap_expected
+
+    el = intersectElements(x)
+    elements=[]
+    for i in barcode : 
+        tmp = []
+        ncode=len(barcode[0])
+        regex=""
+        for range_code in range(nL) :
+            if i[range_code] == "1" : 
+                regex+="1"
+            else: 
+                regex+="[01]"
+        for elem in el[el["barcode"].str.contains(regex)]["Entry"] :# Search if the barcode match with the regex and get the entry name. 
+            tmp.append(elem)
+        tmp=sorted(tmp)
+        elements.append(", ".join(tmp))
+        
+    decode = []
+    for code in barcode : 
+        decode.append(formating(code,names))
+
+    FE = [otab[i]/etab[i] if etab[i]!= None and otab[i]!=None else None for i in range(len(etab))]
+
+    res = pd.DataFrame({"Intersection":decode,"degree":odegree,"Observed_overlap":otab,"Expected_overlap":etab,"FE":FE,"p-value":p_val,"Elements":elements})
+    res.index=barcode
+    return res
