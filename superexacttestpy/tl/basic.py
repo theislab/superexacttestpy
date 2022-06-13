@@ -528,15 +528,6 @@ def supertest(data,n:int,names:list=[],degree:int=-1,lower_tail=False):
     res.index=barcode
     return res
 
-def color_map_color(value, cmap_name='YlOrRd', vmin=0, vmax=1):
-    if value == 0 : 
-        return '#CACACA'
-    norm = mp.colors.Normalize(vmin=vmin, vmax=vmax)
-    cmap = mp.cm.get_cmap(cmap_name)  # PiYG
-    rgb = cmap(norm(abs(value)))[:3]  # will return rgba, we take only first 3 so we get rgb
-    color = mp.colors.rgb2hex(rgb)
-    return color
-
 def decode(barcode,name): 
     res_pres = []
     res_abs= []
