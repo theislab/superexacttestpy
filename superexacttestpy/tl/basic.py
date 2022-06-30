@@ -124,7 +124,7 @@ def dp_sets(x,data,n,logp=False):
         print("data should have at least 2 entries")
         return False 
     
-    res = dmv_hyper(x=x,nl=len(data),l=len_data(data),n=n,p=0.0,logp=logp)
+    res = dmv_hyper(x=x,nl=len(data),set_len=len_data(data),n=n,p=0.0,logp=logp)
     return res
 
 def intersect(data):
