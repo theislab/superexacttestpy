@@ -37,43 +37,42 @@ def plot(data:list,n:int,name:list,degree=-1,sort_by="degree",show_count=True,or
     """ 
     if type(degree)==list: 
         df = stest.tl.supertest(data,n,name,degree=-1,lower_tail=True)
-        df
-        df=df[df['degree'].isin(degree)]
+        df = df[df['degree'].isin(degree)]
     elif type(degree)==int : 
         df = stest.tl.supertest(data,n,name,degree,lower_tail=True)
     else : 
         print("degree should be a list or an int")
         return False
 
-    res_intersect=[]
-    res_overlap=[]
+    res_intersect = []
+    res_overlap = []
 
-    for elem in list(df["Intersection"]) :
+    for elem in list(df["intersection"]) :
         if " & " in elem: 
-            elem=elem.split()
+            elem = elem.split()
             elem = list(filter(lambda a: a != "&", elem)) # remouve the & 
-            res_intersect+=[elem]
+            res_intersect += [elem]
             
         else : 
-            res_intersect+=[[elem]]
+            res_intersect += [[elem]]
     
-    for nb in list(df["Observed_overlap"]) : 
+    for nb in list(df["observed_overlap"]) : 
         res_overlap.append(nb)
-    plot_data=upset.from_memberships(res_intersect,res_overlap)
+    plot_data = upset.from_memberships(res_intersect,res_overlap)
 
     fig = plt.figure(figsize=size)
     if show_count : 
         show_count = '%d'
     else : 
-        show_count=None
+        show_count = None
 
     #Construct the plot 
     if background_color != "dark_background" : 
-        res=upset.UpSet(plot_data,orientation=orientation,sort_by=sort_by,show_counts=show_count,intersection_plot_elements=20,subset_size="auto")
+        res = upset.UpSet(plot_data,orientation=orientation,sort_by=sort_by,show_counts=show_count,intersection_plot_elements=20,subset_size="auto")
     else : 
-        res=upset.UpSet(plot_data,orientation=orientation,sort_by=sort_by,show_counts=show_count,intersection_plot_elements=20,subset_size="auto",facecolor='white')
+        res = upset.UpSet(plot_data,orientation=orientation,sort_by=sort_by,show_counts=show_count,intersection_plot_elements=20,subset_size="auto",facecolor='white')
     if color_p_val : 
-        p_val=[]
+        p_val = []
         for code in list(df.index):
             tmp = list(df["p-value"].loc[[code]])[0]
             if tmp == None : 
@@ -84,12 +83,11 @@ def plot(data:list,n:int,name:list,degree=-1,sort_by="degree",show_count=True,or
                 p_val.append(-round(log(float(1*10**-320),10),2))
             else : #tmp == nan or na 
                 p_val.append(0)
-        vmax=max(p_val)+1/3*max(p_val)
+        vmax = max(p_val)+1/3*max(p_val)
         for i,val in enumerate (list(df.index)) : 
-            col=color_map_color(p_val[i],vmax=vmax)
-            pres,abs=stest.tl.decode(val,name)
+            col = color_map_color(p_val[i],vmax=vmax)
+            pres,abs = stest.tl.decode(val,name)
             res.style_subsets(present = pres, absent=abs,facecolor=col,label=f"-log10(p_value) = {p_val[i]}")
             res.style_subsets()
     with plt.style.context(background_color):
         res.plot(fig)
-        # fig.show()
