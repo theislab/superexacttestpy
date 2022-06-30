@@ -397,7 +397,7 @@ def intersect_elements(x):
             else : 
                 tmp.append("0")
         barcode.append("".join(tmp))
-    return pd.DataFrame({"Entry":allE, "barcode":barcode})
+    return pd.DataFrame({"entry":allE, "barcode":barcode})
 
 def exclusive_intersect0(x): 
     intersects = intersect_elements(x)
@@ -513,7 +513,7 @@ def supertest(data,n:int,names:list=[],degree:int=-1,lower_tail=False):
                 regex += "1"
             else: 
                 regex += "[01]"
-        for elem in el[el["barcode"].str.contains(regex)]["Entry"] :# Search if the barcode match with the regex and get the entry name. 
+        for elem in el[el["barcode"].str.contains(regex)]["entry"] :# Search if the barcode match with the regex and get the entry name. 
             tmp.append(elem)
         tmp = sorted(tmp)
         elements.append(", ".join(tmp))
@@ -522,15 +522,15 @@ def supertest(data,n:int,names:list=[],degree:int=-1,lower_tail=False):
     for code in barcode : 
         decode.append(formating(code,names))
 
-    FE = [otab[i]/etab[i] if etab[i]!= None and otab[i]!=None else None for i in range(len(etab))]
+    FE = [otab[i]/etab[i] if etab[i] != None and otab[i] != None else None for i in range(len(etab))]
 
-    res = pd.DataFrame({"Intersection":decode,"degree":odegree,"Observed_overlap":otab,"Expected_overlap":etab,"FE":FE,"p-value":p_val,"Elements":elements})
+    res = pd.DataFrame({"intersection":decode,"degree":odegree,"observed_overlap":otab,"expected_overlap":etab,"fold_enrichment":FE,"p-value":p_val,"Elements":elements})
     res.index = barcode
     return res
 
 def decode(barcode,name): 
     res_pres = []
-    res_abs= []
+    res_abs = []
     for i in range(len(list(barcode))) :
         if barcode[i] == "1" : 
             res_pres.append(name[i])
