@@ -524,7 +524,7 @@ def supertest(data,n:int,names:list=[],degree:int=-1,lower_tail=False):
 
     FE = [otab[i]/etab[i] if etab[i] != None and otab[i] != None else None for i in range(len(etab))]
 
-    res = pd.DataFrame({"intersection":decode,"degree":odegree,"observed_overlap":otab,"expected_overlap":etab,"fold_enrichment":FE,"p-value":p_val,"Elements":elements})
+    res = pd.DataFrame({"intersection":decode,"degree":odegree,"observed_overlap":otab,"expected_overlap":etab,"fold_enrichment":FE,"p_value":p_val,"elements":elements})
     res.index = barcode
     return res
 

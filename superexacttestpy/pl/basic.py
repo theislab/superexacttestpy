@@ -74,7 +74,7 @@ def plot(data:list,n:int,name:list,degree=-1,sort_by="degree",show_count=True,or
     if color_p_val : 
         p_val = []
         for code in list(df.index):
-            tmp = list(df["p-value"].loc[[code]])[0]
+            tmp = list(df["p_value"].loc[[code]])[0]
             if tmp == None : 
                 p_val.append(0)
             elif tmp > 0 : 
