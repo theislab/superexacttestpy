@@ -424,7 +424,7 @@ def exc2inc_intersect(df:pd.DataFrame):
         d[code] = [nb]
     return pd.DataFrame(d)
 
-def enumerateIntersectSizes(x,degree:int=-1) : 
+def enumerate_intersect_sizes(x,degree:int=-1) : 
     if degree > 0 : 
         return inc_intersect(x,degree)
     otab = exclusive_intersect0(x)
@@ -448,7 +448,7 @@ def supertest(data,n:int,names:list=[],degree:int=-1,lower_tail=False):
    
     x = data 
     size = [len(list(set(x[i]))) for i in range(len(x))]
-    df_overlap_size = enumerateIntersectSizes(x,degree=degree)
+    df_overlap_size = enumerate_intersect_sizes(x,degree=degree)
     
     barcode = list(df_overlap_size.columns)
     overlap_size = [int(df_overlap_size[code]) for code in barcode]
