@@ -1,4 +1,3 @@
-from anndata import AnnData
 from math import log,exp
 from copy import deepcopy
 from random import choices
@@ -34,7 +33,7 @@ def len_data(data:list) -> list :
         data_l.append(len(values))
     return data_l
 
-def log_choose(n:int,k:int) -> float: 
+def log_choose(n:int,k:int) -> float : 
     """
     Approximation of log binomial coefficient nCk
     
@@ -60,13 +59,13 @@ def log_choose(n:int,k:int) -> float:
     if m == 0 : 
         return res 
 
-    for i in range(1,m+1):
+    for i in range(1,m+1) :
         res += log((n-i+1))-log(i)
 
     return res 
 
 
-def dhyper(x:int,w:int,b:int,n:int,logP:bool) -> float: 
+def dhyper(x:int,w:int,b:int,n:int,logP:bool) -> float : 
     """
     Probability to getting x white balls out of n draws from an urn with w white balls and b black balls
 
@@ -151,42 +150,42 @@ def dmv_hyper(x:int,nl:int,set_len:list,n:int,logp:bool) -> float :
         f1.append(0)
     p = 0
     #from inner-most to outer-most
-    for i in range(1,nl+1): 
+    for i in range(1,nl + 1) : 
         if(i == 1) : 
             l = x
             f1[0] = dhyper(x,l,n - l,set_len[nl - 1],i0)
-            for l in range(x+1,min(min_l,n+x-set_len[nl-1])): 
-                f1[l - x] = f1[l - x -1] * ((n - l+1-set_len[nl - 1] + x)/(l - x))  * (l/(n -l+1))
+            for l in range(x+1,min(min_l,n+x-set_len[nl-1])) : 
+                f1[l - x] = f1[l - x -1] * ((n - l + 1 - set_len[nl - 1] + x) / (l - x))  * (l / (n -l + 1))
         f0 = deepcopy(f1)
         if(nl - i >= 2) :
             for k in range(x,min_l+1) : 
                 f1[k - x] = 0
-                l = max(x,k+set_len[nl - i] - n)
+                l = max(x,k + set_len[nl - i] - n)
                 temp = dhyper(l,set_len[nl - i],n - set_len[nl - i],k,i0)
                 f1[k - x] += temp * f0[l - x]
-                for l in range(l+1,k+1) : 
-                    temp = temp * ((set_len[nl - i]-l+1)/l) * ((k-l+1) /(n - set_len[nl - i]-k+l))
+                for l in range(l + 1,k + 1) : 
+                    temp = temp * ((set_len[nl - i] - l + 1) / l) * ((k - l + 1) / (n - set_len[nl - i] - k + l))
                     f1[k - x] += temp * f0[l - x]
             
         #final integration
         j = max(x,set_len[1]+set_len[0] - n)
         temp = dhyper(j,set_len[1],n - set_len[1],set_len[0],i0)
         p += temp * f1[j - x]
-        for j in range(j+1,min_l+1): 
-            temp = temp * ((set_len[1]-j+1)/j) * ((set_len[0]-j+1) /(n - set_len[1]-set_len[0]+j))
+        for j in range(j + 1,min_l + 1): 
+            temp = temp * ((set_len[1] - j + 1) / j) * ((set_len[0] - j + 1) / (n - set_len[1] - set_len[0] + j))
             p += temp * f1[j - x]
 
     if (p > 1 and not logp) : 
         p = 1.0
     if ( p <= 0 ): 
-        p = 2.2*10**308
+        p = 2.2 * 10**308
     if(logp) and p > 0 :
         p = log(p)
     if (logp and p<= 0) :  
         p = 0
     return p 
 
-def dp_sets(x:int,data:list,n:int,logp:bool=False) -> float: 
+def dp_sets(x:int,data:list,n:int,logp:bool=False) -> float : 
     """
     Calculate the probability density of the intersection
     
@@ -260,11 +259,11 @@ def intersect(data:list) -> list :
     ...    ['L', 'P', 'M', 'Q', 'N', 'O']
     """
     res = [list(set(data[0]).intersection(data[1]))]
-    for i in range(1,len(data)): # 1 bc we compute the first value in the initialisation
+    for i in range(1,len(data)) : # 1 bc we compute the first value in the initialisation
         res.append(list(set(res[-1]).intersection(data[i])))
     return res[-1]
 
-def log_choose_logval(n:int,k:int,logval:list):
+def log_choose_logval(n:int,k:int,logval:list) -> float :
     """
     Compute the log binomial coefficient nCk
     
@@ -288,10 +287,10 @@ def log_choose_logval(n:int,k:int,logval:list):
     if m == 0 : 
         return result
     for i in range(m) : 
-        result = result+logval[n-i-1]-logval[i]
+        result = result + logval[n - i - 1] - logval[i]
     return result
 
-def dhyper_logval(x,w,b,n,logval,logp): 
+def dhyper_logval(x:int,w:int,b:int,n:int,logval:list,logp:bool): 
     """
     Probability to getting x white balls out of n draws from an urn with w white balls and b black balls
 
@@ -320,13 +319,13 @@ def dhyper_logval(x,w,b,n,logval,logp):
         if logp : 
             result = log(result) ## Strange bc log(0) is invalid 
     else : 
-        result = log_choose_logval(w,x,logval)+log_choose_logval(b,n-x,logval)
-        result -= log_choose_logval(w+b,n,logval)
+        result = log_choose_logval(w,x,logval) + log_choose_logval(b,n - x,logval)
+        result -= log_choose_logval(w + b,n,logval)
         if not logp : 
             result = exp(result)
     return result
 
-def dmv_hyper_logval(x:int,nl:int,set_len:list,n:int,logval:list,logp:bool=False): 
+def dmv_hyper_logval(x:int,nl:int,set_len:list,n:int,logval:list,logp:bool=False) : 
     """
     Get the distribution of multiset intersection test
     
@@ -359,7 +358,7 @@ def dmv_hyper_logval(x:int,nl:int,set_len:list,n:int,logval:list,logp:bool=False
     ...    0
     """
     p = 0 
-    a_size = max (set_len)-x+1
+    a_size = max (set_len) - x + 1
     min_l = min(set_len)
     f1 = [0 for i in range(a_size)]
 
@@ -371,35 +370,35 @@ def dmv_hyper_logval(x:int,nl:int,set_len:list,n:int,logval:list,logp:bool=False
     for i in range(1,nl) : 
         if i == 1  : 
             l = x 
-            f1[0] = dhyper_logval(x,l,n-l,set_len[nl-1],logval,logp)
-            for ll in range(x+1,min(min_l,n+x-set_len[nl-1])+1) : 
-                f1[ll-x] = f1[ll - x - 1] * ((n-ll+1-set_len[nl-1]+x)/(ll-x)) * (l / (n-ll+1))
+            f1[0] = dhyper_logval(x,l,n - l,set_len[nl - 1],logval,logp)
+            for ll in range(x + 1,min(min_l,n + x - set_len[nl - 1]) + 1) : 
+                f1[ll - x] = f1[ll - x - 1] * ((n - ll + 1 - set_len[nl - 1] + x) / (ll - x)) * (l / (n - ll + 1))
         f0 = deepcopy(f1)
         if nl-i >= 2 : 
-            for k in range(x,min_l+1) : 
-                f1[k-x] = 0
-                l = max(x,k+set_len[nl-i]-n)
-                temp = dhyper_logval(l,set_len[nl-i],n-set_len[nl-i],k,logval,logp)
-                f1[k-x] += temp*f0[l-x]
-                for ll in range(l+1,k+1): 
-                    temp = temp*((set_len[nl-i]-ll+1)/ll)*((k-ll+1)/(n-set_len[nl-i]-k+ll))
-                    f1[k-x] += temp*f0[ll-x]
-        j = max(x,set_len[1]+set_len[0]-n)
-        temp = dhyper_logval(j,set_len[1],n-set_len[1],set_len[0],logval,logp)
-        p += temp*f1[j-x]
-        for jj in range(j+1,min_l+1): 
-            temp = temp*((set_len[1]-jj+1)/jj)*((set_len[0]-jj+1)/(n-set_len[1]-set_len[0]+jj))
-            p += temp*f1[jj-x]
+            for k in range(x,min_l + 1) : 
+                f1[k - x] = 0
+                l = max(x,k + set_len[nl - i] - n)
+                temp = dhyper_logval(l,set_len[nl - i],n - set_len[nl - i],k,logval,logp)
+                f1[k - x] += temp*f0[l - x]
+                for ll in range(l + 1,k + 1): 
+                    temp = temp*((set_len[nl - i] - ll + 1) / ll) * ((k - ll + 1) / (n - set_len[nl - i] - k + ll))
+                    f1[k - x] += temp * f0[ll - x]
+        j = max(x,set_len[1] + set_len[0]-n)
+        temp = dhyper_logval(j,set_len[1],n - set_len[1],set_len[0],logval,logp)
+        p += temp * f1[j - x]
+        for jj in range(j + 1,min_l + 1): 
+            temp = temp * ((set_len[1] - jj + 1) / jj) * ((set_len[0] - jj + 1) / (n - set_len[1] - set_len[0] + jj))
+            p += temp * f1[jj - x]
 
-        if p>1 : 
+        if p > 1 : 
             p = 1.0
         if p < 0 : 
-            p = 2.2*10**308
+            p = 2.2 * 10**308
         if logp : 
             p = log(p)
         return p 
 
-def pmvhyper(x:int,nl:int,set_len:list,n,p,lower_tail:bool=False,logp:bool=False): 
+def pmvhyper(x:int,nl:int,set_len:list,n,p,lower_tail:bool=False,logp:bool=False) -> float : 
     """
     Get the mass probability of multiset intersection
 
@@ -423,57 +422,57 @@ def pmvhyper(x:int,nl:int,set_len:list,n,p,lower_tail:bool=False,logp:bool=False
     p : float
         probability 
     """
-    tiny = 1.0*10**308
-    i0=0
-    p0=0.0
+    tiny = 1.0 * 10**308
+    i0 = 0
+    p0 = 0.0
     min_l = min(set_len)
-    pp = [0 for i in range(min_l+1)]
-    logVal = [log(i) for i in range(1,n+1)]
+    pp = [0 for i in range(min_l + 1)]
+    logVal = [log(i) for i in range(1,n + 1)]
     
     if x == 0 : 
-        p = dmv_hyper_logval(x,nl,set_len,n,0,logVal,logp)
+        p = dmv_hyper_logval(x,nl,set_len,n,logVal,logp)
         if not lower_tail : 
             p = 1.0 - p 
         if p > 1 : 
             p = 1.0
         if p < 0 : 
-            p = 2.2*10**308
+            p = 2.2 * 10**308
         if logp : 
             p = log(p)
         return p
     Xmean = n 
-    for i in range(nl): 
-        Xmean = Xmean *set_len[i] / n 
+    for i in range(nl) :  
+        Xmean = Xmean * set_len[i] / n 
 
-    for i in range(min_l+1): 
+    for i in range(min_l + 1) : 
         pp[i] = 0
     p = 0 
     if x > Xmean : 
-        i = x+1 
+        i = x + 1 
         while i <= min_l : 
-            p0=dmv_hyper_logval(i,nl,set_len,n,0.0,logVal,logp)
+            p0=dmv_hyper_logval(i,nl,set_len,n,logVal,logp)
             pp[i] = p0 
-            if i > x+1 : 
+            if i > x + 1 : 
                 break 
             if p0 <= tiny : 
                 break 
-            if i > (x+1) and p0/pp[i-1] <= 0.01 : 
+            if i > (x + 1) and p0 / pp[i - 1] <= 0.01 : 
                 break 
-            if i > x+1 : 
+            if i > x + 1 : 
                 break 
  
-        p = pp[x+1]#Not in the C code but it's works 
+        p = pp[x + 1]#Not in the C code but it's works 
     if not lower_tail : 
-        p = 1-p
+        p = 1 - p
     if p > 1 : 
         p == 1.0
     if p < 0 : 
-        p = 2.2*10**308
+        p = 2.2 * 10**308
     if logp:
         p = log(p)
     return p 
 
-def cpsets_sim(x:int,set_len:list,n:int,lower_tail:bool=True,logp:bool=False,number_sim:int=10000): 
+def cpsets_sim(x:int,set_len:list,n:int,lower_tail:bool=True,logp:bool=False,number_sim:int=10000) -> float: 
     """
     Function to simulate the intersection probability on multisets
     
@@ -506,8 +505,8 @@ def cpsets_sim(x:int,set_len:list,n:int,lower_tail:bool=True,logp:bool=False,num
     """
     nl = len (set_len)
     count = 0
-    for i in range(1,number_sim): 
-        for length in set_len:
+    for i in range(1,number_sim) : 
+        for length in set_len :
             tmp = choices(range(1,n),k=length)
             tmp = Counter(tmp).most_common() # We count the occurence of eatch value 
             for tuple in tmp : 
@@ -517,14 +516,14 @@ def cpsets_sim(x:int,set_len:list,n:int,lower_tail:bool=True,logp:bool=False,num
                     break
                 elif tuple[0] > nl : 
                     break # break the loop bc if the nl value is 
-    p = count/number_sim
+    p = count / number_sim
     if not lower_tail : 
-        return 1-p 
+        return 1 - p 
     if logp : 
         return log(p)
     return p 
 
-def cpsets(x:int,data:list,n:int,lower_tail:bool=True,logp:bool=False,p_val_sim:bool=False,number_sim:int=100000):
+def cpsets(x:int,data:list,n:int,lower_tail:bool=True,logp:bool=False,p_val_sim:bool=False,number_sim:int=100000) -> float:
     """
     Compute the distribution function of multiset intersection test. 
     With the possibility to simulate a p-value
@@ -573,10 +572,10 @@ def cpsets(x:int,data:list,n:int,lower_tail:bool=True,logp:bool=False,p_val_sim:
         return False 
     if p_val_sim : 
         return cpsets_sim(x,l_data,n,lower_tail,logp,p_val_sim,number_sim)
-    res = pmvhyper(x,nl,l_data,n,0,lower_tail,logp)
+    res = pmvhyper(x,nl,l_data,n,lower_tail,logp)
     return res 
 
-def prod(data,total): 
+def prod(data:list,total:int) -> float: 
     """
     Calculate the multiplication of each item in the list divided by the total 
     
@@ -604,12 +603,13 @@ def prod(data,total):
     ... 0.007083333333333334
     """ 
     res = 1 # bc if it's 0 0*anything = 0 
-    for i in range(len(data)):
-        res *= len(data[i])/total
-    return total*res 
+    for i in range(len(data)) :
+        res *= len(data[i]) / total
+    return total * res 
 
-def mset (data:list,n:int,lower_tail:bool=True,logp:bool=False) :
-    """A wrapper to call cpsets 
+def mset (data:list,n:int,lower_tail:bool=True,logp:bool=False) -> dict :
+    """
+    A wrapper to call cpsets 
 
     Parameters
     ----------
@@ -655,7 +655,7 @@ def mset (data:list,n:int,lower_tail:bool=True,logp:bool=False) :
         print("invalid input")
         return False
     for nb in l_data : 
-        if nb>n or nb==0 : 
+        if nb > n or nb == 0 : 
             print("invalid input")
             return False 
 
@@ -669,11 +669,15 @@ def mset (data:list,n:int,lower_tail:bool=True,logp:bool=False) :
             p = 1
      
     else : 
-        p = cpsets(Obs-1,data,n,lower_tail,logp)
+        p = cpsets(Obs - 1,data,n,lower_tail,logp)
     
-    return {"Intersection":intersects, "FE" : round(Obs/Exp,1), "p-value":p}
+    return {
+        "Intersection" : intersects, 
+        "FE" : round(Obs / Exp,1), 
+        "p-value" : p
+        }
 
-def mk_barcode_degree(n:int,degree:int or None): 
+def mk_barcode_degree(n:int,degree:int or None) -> list : 
     """
     Generate a barcode of length n with a given degree
     
@@ -697,7 +701,7 @@ def mk_barcode_degree(n:int,degree:int or None):
     res = []
 
     if degree == None : 
-        degree = [i for i in range(1,n+1)]
+        degree = [i for i in range(1,n + 1)]
 
     if type(degree) == list : 
         for comb in product(["0","1"],repeat=n): 
@@ -706,7 +710,7 @@ def mk_barcode_degree(n:int,degree:int or None):
                 res.append("".join(tmp)) 
         return res
 
-    if type(degree) == int: 
+    if type(degree) == int : 
         if degree > n : 
             print("Impossible")
             return False
@@ -720,7 +724,7 @@ def mk_barcode_degree(n:int,degree:int or None):
         print("Degree should be a list of int of an int")
         return False 
 
-def inc_intersect(x,degree:int) : 
+def inc_intersect(x:list,degree:int) -> pd.DataFrame : 
     """
     Calculate the number of intersection for a given degree for all barcodes 
 
@@ -773,7 +777,7 @@ def inc_intersect(x,degree:int) :
         d[barcodes[i]] = [otab[i]]
     return pd.DataFrame(d)
 
-def intersect_elements(x): 
+def intersect_elements(x:list) -> pd.DataFrame : 
     """
     Create a dataframe with the barcode for all the possible intersections
 
@@ -826,7 +830,7 @@ def intersect_elements(x):
         barcode.append("".join(tmp))
     return pd.DataFrame({"entry":allE, "barcode":barcode})
 
-def exclusive_intersect0(x): 
+def exclusive_intersect0(x:list) -> pd.DataFrame : 
     """
     Calculate the number of exclusive intersection for all barcodes
     Parameters
@@ -859,7 +863,7 @@ def exclusive_intersect0(x):
         otab[code] = [nb]
     return pd.DataFrame(otab)
 
-def exc2inc_intersect(df:pd.DataFrame): 
+def exc2inc_intersect(df:pd.DataFrame) -> pd.DataFrame : 
     """
     Calculate the number of intersection (exclusive plus inclusive) for all barcodes
 
@@ -898,7 +902,7 @@ def exc2inc_intersect(df:pd.DataFrame):
         d[code] = [nb]
     return pd.DataFrame(d)
 
-def enumerate_intersect_sizes(x,degree:int=-1) : 
+def enumerate_intersect_sizes(x:list,degree:int=-1) -> pd.DataFrame : 
     """
     Get a table with the number of intersection for each barcode of a given degree
 
@@ -933,7 +937,7 @@ def enumerate_intersect_sizes(x,degree:int=-1) :
     otab = exclusive_intersect0(x)
     return exc2inc_intersect(otab)
 
-def formating(barcode,names,collapse=' & '): 
+def formating(barcode,names,collapse=' & ') -> str : 
     """
     Format a barcode to a string
 
@@ -964,7 +968,7 @@ def formating(barcode,names,collapse=' & '):
             res.append(names[i])
     return collapse.join(res)
 
-def supertest(data,n:int,names:list=[],degree:int=-1,lower_tail=False): 
+def supertest(data,n:int,names:list=[],degree:int=-1,lower_tail=False) -> pd.DataFrame : 
     """
     Calculate the supertest for a given data set
     
@@ -984,7 +988,7 @@ def supertest(data,n:int,names:list=[],degree:int=-1,lower_tail=False):
     Returns
     -------
     pd.DataFrame
-        ipsum
+        df with all the information computed by the supertest
     
     Example
     -------
@@ -1014,8 +1018,8 @@ def supertest(data,n:int,names:list=[],degree:int=-1,lower_tail=False):
         print("Input must be a list")
         return False
     if len(names) != len(data) :
-        for i in range(len(data)): 
-            names.append(f"Set{i+1}")
+        for i in range(len(data)) : 
+            names.append(f"Set{i + 1}")
    
     x = data 
     size = [len(list(set(x[i]))) for i in range(len(x))]
@@ -1031,17 +1035,17 @@ def supertest(data,n:int,names:list=[],degree:int=-1,lower_tail=False):
                 return False
 
         overlap_expected = [None for i in df_overlap_size]
-        for i in range(df_overlap_size.size): 
+        for i in range(df_overlap_size.size) : 
             nb = [match.start() for match in finditer('1',barcode[i])]
             if len(nb) > 1 : 
                 overlap_expected[i] = n
                 for size_nb in nb : 
-                    overlap_expected[i] *= size[size_nb]/n
+                    overlap_expected[i] *= size[size_nb] / n
             else : 
                 overlap_expected[i] = None
 
         p_val = [0 for i in range(df_overlap_size.size)]
-        for idx,code in enumerate(barcode): 
+        for idx,code in enumerate(barcode) : 
             i1 = [match.start() for match in finditer('1',code)]
             if len(i1) == 1 : 
                 p_val[idx] = None
@@ -1050,7 +1054,7 @@ def supertest(data,n:int,names:list=[],degree:int=-1,lower_tail=False):
             else : 
                 L = [x[i] for i in i1]
                 # print(cpsets(list(df_overlap_size.loc[0])[idx]-1,L,n))
-                p_val[idx] = cpsets(list(df_overlap_size.loc[0])[idx]-1,L,n,lower_tail=lower_tail)
+                p_val[idx] = cpsets(list(df_overlap_size.loc[0])[idx] - 1,L,n,lower_tail=lower_tail)
 
     nl = len(x)
     if type(degree) == int : 
@@ -1093,13 +1097,36 @@ def supertest(data,n:int,names:list=[],degree:int=-1,lower_tail=False):
     for code in barcode : 
         decode.append(formating(code,names))
 
-    FE = [otab[i]/etab[i] if etab[i] != None and otab[i] != None else None for i in range(len(etab))]
+    FE = [otab[i] / etab[i] if etab[i] != None and otab[i] != None else None for i in range(len(etab))]
 
     res = pd.DataFrame({"intersection":decode,"degree":odegree,"observed_overlap":otab,"expected_overlap":etab,"fold_enrichment":FE,"p_value":p_val,"elements":elements})
     res.index = barcode
     return res
 
-def decode(barcode,name): 
+def decode(barcode,name) : 
+    """
+    Decode a barcode 
+    
+    Parameters
+    ----------
+    barcode : str
+        Barcode to decode
+    name : list
+        List of names of the sets
+    
+    Returns
+    -------
+    res_pres : list
+        List of sets in which the barcode is present
+    res_abs : list
+        List of sets in which the barcode is not present
+    
+    Examples
+    --------
+    >>> decode("011",["Set1","Set2","Set3"])
+    ... (['Set2', 'Set3'], ['Set1'])
+
+    """
     res_pres = []
     res_abs = []
     for i in range(len(list(barcode))) :
