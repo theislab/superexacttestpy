@@ -12,6 +12,17 @@ import superexacttestpy as stest
 ```
 
 ## Tools: `tl`
+Here you will find the documentation of the supertest function. 
+```{eval-rst}
+.. module:: superexacttestpy.tl
+.. currentmodule:: superexacttestpy
+
+.. autosummary::
+    :toctree: generated/
+
+    tl.supertest
+```
+
 Here you will find all the useful functions to perform the superexacttest.
 
 ```{eval-rst}
