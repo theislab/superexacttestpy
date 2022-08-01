@@ -67,7 +67,7 @@ def plot(
     degree : int
         Intersection degree
     sort_by : str
-        Sort the results by "degree" or "p_val"
+        Sort the results by "degree" or "cardinality"
     show_count : bool
         Show the number of genes in each set
     orientation : str
