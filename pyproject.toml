@@ -11,9 +11,12 @@ name = "superexacttestpy"
 description = "Python implementation of the SuperExactTest algorithm"
 authors = [
     {name = "Ignacio Ibarra"},
+    {name = "Tom Mauger-Birocheau"}
 ]
 maintainers = [
     {name = "Ignacio Ibarra", email = "ignacio.ibarra@helmholtz-muenchen.de"},
+    {name = "Tom Mauger-Birocheau", email = "tom.mauger-birocheau@etu.univ-cotedazur.fr"}
+
 ]
 urls.Documentation = "https://superexacttestpy.readthedocs.io/"
 urls.Source = "https://github.com/theislab/superexacttestpy"
