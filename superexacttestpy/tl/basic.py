@@ -968,7 +968,7 @@ def formating(barcode,names,collapse=' & ') -> str :
             res.append(names[i])
     return collapse.join(res)
 
-def supertest(data,n:int,names:list=[],degree:int=-1,lower_tail=False) -> pd.DataFrame : 
+def supertest(data,n:int,names:list=[],degree:int=-1,lower_tail=True) -> pd.DataFrame : 
     """
     Calculate the supertest for a given data set
     
