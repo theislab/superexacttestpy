@@ -19,7 +19,7 @@ sys.path.insert(0, str(HERE / "extensions"))
 info = metadata("superexacttestpy")
 project = info["Name"]
 author = info["Author"]
-copyright = f"{datetime.now():%Y}, {author}."
+copyright = f"{datetime.now():%Y}, {author}"
 version = info["Version"]
 
 # The full version, including alpha/beta/rc tags
