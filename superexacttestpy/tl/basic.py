@@ -983,7 +983,7 @@ def supertest(data,n:int,names:list=[],degree:int=-1,lower_tail=False) -> pd.Dat
     degree : int
         The degree of the barcode (if -1, no degree selection)
     lower_tail : bool
-        if TRUE (default), probability is P[overlap < m], otherwise, P[overlap >= m], where m is the number of elements shared by all sets.    
+        if True, probability is P[overlap < m], otherwise, P[overlap >= m], where m is the number of elements shared by all sets.    
     
     Returns
     -------
