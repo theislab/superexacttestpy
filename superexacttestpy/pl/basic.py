@@ -83,7 +83,8 @@ def plot(
     
     Returns
     -------
-    None 
+    df : pd.DataFrame
+        Dataframe with the results of the superexact test 
 
     Example
     -------
@@ -147,3 +148,5 @@ def plot(
             res.style_subsets()
     with plt.style.context(background_color) :
         res.plot(fig)
+    plt.show()
+    return df
