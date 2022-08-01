@@ -78,7 +78,7 @@ def plot(
         Size of the plot
     background_color : str
         Background color of the plot. 
-        Default = "dark_background" other possibility : 
+        Default = "seaborn-notebook" other possibility : 
             see `style.available` for list of available styles
     
     Returns
