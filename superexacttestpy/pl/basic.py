@@ -51,7 +51,7 @@ def plot(
     orientation:str="horizontal",
     color_p_val:bool=True,
     size:tuple=(10,5),
-    background_color:str="dark_background"
+    background_color:str="seaborn-notebook"
     ) -> pd.DataFrame :
     """
     Plot the results of the superexact test
@@ -125,9 +125,24 @@ def plot(
 
     #Construct the plot 
     if background_color != "dark_background" : 
-        res = upset.UpSet(plot_data,orientation=orientation,sort_by=sort_by,show_counts=show_count,intersection_plot_elements=20,subset_size="auto")
-    else : 
-        res = upset.UpSet(plot_data,orientation=orientation,sort_by=sort_by,show_counts=show_count,intersection_plot_elements=20,subset_size="auto",facecolor='white')
+        res = upset.UpSet(
+            plot_data,
+            orientation=orientation,
+            sort_by=sort_by,
+            show_counts=show_count,
+            intersection_plot_elements=20,
+            subset_size="auto"
+            )
+    elif background_color == "dark_background": 
+        res = upset.UpSet(
+            plot_data,
+            orientation=orientation,
+            sort_by=sort_by,
+            show_counts=show_count,
+            intersection_plot_elements=20,
+            subset_size="auto",
+            facecolor='white')
+        
     if color_p_val : 
         p_val = []
         for code in list(df.index) :
