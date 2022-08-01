@@ -20,7 +20,7 @@ Superextractestpy is a python reimplementation of the R package [SuperExactTest]
 
 This algorithm calculates the intersection probability of a large number of genes in a genetic set with linear complexity. 
 
-### How to use it ? 
+### How to use it? 
 Import the package 
 ```python
 import superexacttestpy as s 
@@ -42,24 +42,24 @@ If you just want the df with the results, you can use the function `s.tl.superte
 ```python
 s.tl.supertest(data=data,n=background_size,names=names)
 ```
-The function supertest have some optional arguments: 
-* degree: the degree of the intersection you wan't to compute.
+The function supertest has some optional arguments: 
+* degree: the degree of the intersection you want to compute.
 * lower_tail: Let m be the number of elements shared in the sets : if True, p = P[overlap < m] and if False, p = P[overlap >= m].
 
-If you wan't to get the df and to plot the results, you can use the function `s.pl.plot()` 
+If you want to get the df and plot the results, you can use the function `s.pl.plot()` 
 ```python
 s.pl.plot(data=data,n=background_size,names=names)
 ```
-The function plot have some optional arguments:
-* degree: the degree of the intersection you wan't to compute.
+The function plot has some optional arguments:
+* degree: the degree of the intersection you want to compute.
 * sort_by: on what you want to sort the bars "degree" or "p_val"
 * show_count: if True, the number of genes in the intersection is shown.
 * color_p_val: if True, the bars are colored by their p-value.
-* size : tuple of the figsize 
-* background_color: color of the background of the plot.
+* size: tuple of the figsize 
+* background_color: the color of the background of the plot.
 
 ### Side function 
-Some sides functions are available and will be describe in the [readthedocs][link-api]
+Some sides functions are available and will be described in the [readthedocs][link-api]
 
 ## Installation
 
