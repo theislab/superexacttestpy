@@ -398,7 +398,7 @@ def dmv_hyper_logval(x:int,nl:int,set_len:list,n:int,logval:list,logp:bool=False
             p = log(p)
         return p 
 
-def pmvhyper(x:int,nl:int,set_len:list,n,p,lower_tail:bool=False,logp:bool=False) -> float : 
+def pmvhyper(x:int,nl:int,set_len:list,n,lower_tail:bool=False,logp:bool=False) -> float : 
     """
     Get the mass probability of multiset intersection
 
