@@ -30,10 +30,10 @@ def color_map_color(value, cmap_name='YlOrRd', vmin=0, vmax=1):
     Example
     -------
     >>> color_map_color(0.5, cmap_name='YlOrRd', vmin=0, vmax=1)
-    ... '#fd8c3c'
+    ... "#fd8c3c"
+
     """
 
-def color_map_color(value, cmap_name='YlOrRd', vmin=0, vmax=1):
     if value == 0 :
         return '#CACACA'
     norm = Normalize(vmin=vmin, vmax=vmax)
