@@ -26,6 +26,10 @@ If you want to get the df and plot the results, you can use the function `s.pl.p
 s.pl.plot(data=data, n=background_size, names=names)
 ```
 
+```{image} _static/output_example/supertest.png
+
+```
+
 ## Tutorials
 
 ```{toctree}
