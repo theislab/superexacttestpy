@@ -124,24 +124,15 @@ def plot(
         show_count = None
 
     #Construct the plot 
-    if background_color != "dark_background" : 
-        res = upset.UpSet(
-            plot_data,
-            orientation=orientation,
-            sort_by=sort_by,
-            show_counts=show_count,
-            intersection_plot_elements=20,
-            subset_size="auto"
-            )
-    elif background_color == "dark_background": 
-        res = upset.UpSet(
-            plot_data,
-            orientation=orientation,
-            sort_by=sort_by,
-            show_counts=show_count,
-            intersection_plot_elements=20,
-            subset_size="auto",
-            facecolor='white')
+    res = upset.UpSet(
+        plot_data,
+        element_size=None,
+        orientation=orientation,
+        sort_by=sort_by,
+        show_counts=show_count,
+        intersection_plot_elements=20,
+        subset_size="auto"
+        )
         
     if color_p_val : 
         p_val = []
@@ -162,6 +153,7 @@ def plot(
             res.style_subsets(present = pres, absent=abs,facecolor=col,label=f"-log10(p_value) = {p_val[i]}")
             res.style_subsets()
     with plt.style.context(background_color) :
-        res.plot(fig)
+        res.plot(fig = fig)
+    plt.suptitle("test")
     plt.show()
     return df

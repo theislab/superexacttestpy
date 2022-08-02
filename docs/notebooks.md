@@ -30,7 +30,7 @@ s.pl.plot(
 )
 ```
 
-## Notebook example
+## Tutorials
 ```{toctree}
 :hidden: true
 :maxdepth: 1

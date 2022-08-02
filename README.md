@@ -23,7 +23,7 @@ This algorithm calculates the intersection probability of a large number of gene
 ### How to use it? 
 Import the package 
 ```python
-import superexacttestpy as s 
+import superexacttestpy as stest 
 ```
 
 For example, we want to make the test on this fictive set: 
@@ -40,7 +40,7 @@ background_size = 1000
 
 If you just want the df with the results, you can use the function `s.tl.supertest()` 
 ```python
-s.tl.supertest(data=data,n=background_size,names=names)
+stest.tl.supertest(data=data,n=background_size,names=names)
 ```
 The function supertest has some optional arguments: 
 * degree: the degree of the intersection you want to compute.
@@ -48,7 +48,7 @@ The function supertest has some optional arguments:
 
 If you want to get the df and plot the results, you can use the function `s.pl.plot()` 
 ```python
-s.pl.plot(data=data,n=background_size,names=names)
+stest.pl.plot(data=data,n=background_size,names=names)
 ```
 The function plot has some optional arguments:
 * degree: the degree of the intersection you want to compute.
