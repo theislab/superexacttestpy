@@ -65,11 +65,6 @@ napoleon_include_init_with_doc = False
 napoleon_use_rtype = True  # having a separate entry generally helps readability
 napoleon_use_param = True
 
-intersphinx_mapping = {
-    "anndata": ("https://anndata.readthedocs.io/en/stable/", None),
-    "numpy": ("https://numpy.org/doc/stable/", None),
-}
-
 nbsphinx_execute = "never"
 
 # List of patterns, relative to source directory, that match files and
