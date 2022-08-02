@@ -82,9 +82,14 @@ The function plot has some optional arguments:
 -   degree: the degree of the intersection you want to compute.
 -   sort_by: on what you want to sort the bars "degree" or "p_val"
 -   show_count: if True, the number of genes in the intersection is shown.
--   color_p_val: if True, the bars are colored by their p-value.
 -   size: tuple of the figsize
 -   background_color: the color of the background of the plot.
+
+<p align="center">
+  <img src="./sketch/supertest.png?raw=true" style="width:75%">
+</p>
+
+Plotting function output
 
 ### Side function
 
