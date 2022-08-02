@@ -38,7 +38,7 @@ names = ["Set1","Set2","Set3"]
 background_size = 1000 
 ```
 
-If you just want the df with the results, you can use the function `s.tl.supertest()` 
+If you just want the df with the results, you can use the function `stest.tl.supertest()` 
 ```python
 stest.tl.supertest(data=data,n=background_size,names=names)
 ```
@@ -46,7 +46,7 @@ The function supertest has some optional arguments:
 * degree: the degree of the intersection you want to compute.
 * lower_tail: Let m be the number of elements shared in the sets : if True, p = P[overlap < m] and if False, p = P[overlap >= m].
 
-If you want to get the df and plot the results, you can use the function `s.pl.plot()` 
+If you want to get the df and plot the results, you can use the function `stest.pl.plot()` 
 ```python
 stest.pl.plot(data=data,n=background_size,names=names)
 ```

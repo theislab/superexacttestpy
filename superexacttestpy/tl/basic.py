@@ -12,21 +12,21 @@ def len_data(data:list) -> list :
 
     Parameters
     ----------
-    data : list
-        the list of set to analyse
+    data: list
+        The list of sets to analyze
     
     Returns
     -------
-    data : list
-        list of length for all sublist in data 
+    data: list
+        List of length for all sublists in data 
         
     Example 
     --------
-    >>> len_data([
-        ["A","b","c"],
-        ["c","d"]
-        ])
-    ... [3, 2]
+    >>> data = [["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
+        ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+        ["H","I","J","K","L","M","N","O","P","Q"]]
+    >>> len_data(data)
+    ... [17, 15, 10]
     """
     data_l = []
     for values in data : 
@@ -35,19 +35,19 @@ def len_data(data:list) -> list :
 
 def log_choose(n:int,k:int) -> float : 
     """
-    Approximation of log binomial coefficient nCk
+    Approximation of log-binomial coefficient nCk
     
     Parameters
     ----------
-    n : int 
+    n: int 
         Number of element 
-    k : int 
+    k: int 
         Number of subparts 
     
     Returns
     -------
-    res : float
-        how many ways there are to choose k things out of a larger set of n things 
+    res: float
+        How many ways there are to choose k things out of a larger set of n things 
         
     Example 
     --------
@@ -71,21 +71,21 @@ def dhyper(x:int,w:int,b:int,n:int,logP:bool) -> float :
 
     Parameters
     ----------
-    x : int 
-        Number of element you wan't to take 
-    w : int 
+    x: int 
+        Number of elements you want to take 
+    w: int 
         Number of draws you have 
-    b : int 
-        Number of total element with x caracteristic  
-    n : int 
-        Number of total element without x caracteristic
-    logP : bool 
-        the result should be in log scale 
+    b: int 
+        Number of total elements with x characteristic  
+    n: int 
+        Number of total elements without x characteristic
+    logP: bool 
+        The result should be with a log scale 
 
     Returns
     -------
-    res : float
-        probability of getting x white balls out of n draws from an urn with w white balls and b black balls
+    res: float
+        Probability of getting x white balls out of n draws from an urn with w white balls and b black balls
         
     Example 
     --------
@@ -110,25 +110,25 @@ def dhyper(x:int,w:int,b:int,n:int,logP:bool) -> float :
 
 def dmv_hyper(x:int,nl:int,set_len:list,n:int,logp:bool) -> float : 
     """
-    Calculate the probability density of x elems in all of the subsets
+    Calculate the probability density of x elements in all of the subsets
     
     Parameters
     ----------
-    x : int 
-        number of element x 
-    nl : int 
-        Number of sublist in data
+    x: int 
+        Number of elements x 
+    nl: int 
+        Number of sublists in data
     set_len : list 
-        List of length for all sublist in data
-    n : bool 
-        Lenght of total background
-    logp : bool
-        the result should be in log scale
+        List of length for all sublists in data
+    n: bool 
+        Length of total background
+    logp: bool
+        The result should be with a log scale 
 
     Returns
     -------
-    p : float
-        probability density of x elems in all of the subsets
+    p: float
+        Probability density of x elements in all of the subsets
         
     Example 
     --------
@@ -191,19 +191,19 @@ def dp_sets(x:int,data:list,n:int,logp:bool=False) -> float :
     
     Parameters
     ----------
-    x : int 
-        size of gene intersection 
-    data : list
+    x: int 
+        Size of gene intersection 
+    data: list
         List of list of gene 
-    n : int 
-        Number of total background size : total number of gene 
-    logP : bool 
-        the result should be in log scale 
+    n: int 
+        Number of total background size: total number of gene 
+    logP: bool 
+        The result should be with a log scale
 
     Returns
     -------
-    res : float
-        probability density of the intersection 
+    res: float
+        Probability density of the intersection 
         
     Example 
     --------
@@ -212,6 +212,7 @@ def dp_sets(x:int,data:list,n:int,logp:bool=False) -> float :
 
     >>> dhyper(5,10,10,12,True)
     ...    -1.4268782320528786
+
     """
     l_data = len_data(data)
     mini = min(l_data)
@@ -241,22 +242,22 @@ def intersect(data:list) -> list :
     
     Parameters
     ----------    
-    data : list
+    data: list
         List of list of gene
 
     Returns
     -------
-    res : list
+    res: list
         List of gene overlapping in all input vectors
         
     Example 
     --------
-    >>> intersect([
-        ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
+    >>> data = [["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
         ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
-        ["H","I","J","K","L","M","N","O","P","Q"]
-        ])
+        ["H","I","J","K","L","M","N","O","P","Q"]]
+    >>> intersect(data)
     ...    ['L', 'P', 'M', 'Q', 'N', 'O']
+
     """
     res = [list(set(data[0]).intersection(data[1]))]
     for i in range(1,len(data)) : # 1 bc we compute the first value in the initialisation
@@ -269,17 +270,17 @@ def log_choose_logval(n:int,k:int,logval:list) -> float :
     
     Parameters
     ----------
-    n : int 
+    n: int 
         Number of total element 
-    k : int 
-        Number of element you wan't to take 
-    logval : list 
-        list of log value for i in [0,n]
+    k: int 
+        Number of elements you want to take 
+    logval: list 
+        List of log value for i in [0,n]
 
     Returns
     -------
-    res : float
-        how many ways there are to choose k things out of a larger set of n things with log scale
+    res: float
+        How many ways there are to choose k things out of a larger set of n things with log scale
 
     """ 
     m = min(k,n-k)
@@ -296,23 +297,24 @@ def dhyper_logval(x:int,w:int,b:int,n:int,logval:list,logp:bool):
 
     Parameters
     ----------
-    x : int 
-        Number of element you wan't to take 
-    w : int 
+    x: int 
+        Number of elements you want to take 
+    w: int 
         Number of draws you have 
-    b : int 
-        Number of total element with x caracteristic  
-    n : int 
-        Number of total element without x caracteristic
-    logval : list 
-        list of log value for i in [0,n]
-    logP : bool 
-        the result should be in log scale 
+    b: int 
+        Number of total elements with x characteristic  
+    n: int 
+        Number of total elements without x characteristic
+    logval: list 
+        List of log value for i in [0,n]
+    logP: bool 
+        The result should be with a log scale
 
     Returns
     -------
-    res : float
-        probability of getting x white balls out of n draws from an urn with w white balls and b black balls
+    res: float
+        Probability of getting x white balls out of n draws from an urn with w white balls and b black balls
+    
     """
     if x > w or x > n or b+n < n : 
         result = 0 
@@ -327,27 +329,27 @@ def dhyper_logval(x:int,w:int,b:int,n:int,logval:list,logp:bool):
 
 def dmv_hyper_logval(x:int,nl:int,set_len:list,n:int,logval:list,logp:bool=False) : 
     """
-    Get the distribution of multiset intersection test
+    Get the distribution of the multiset intersection test
     
     Parameters
     ----------
-    x : int 
-        number of element x 
-    nl : int 
-        Number of sublist in data
-    set_len : list 
-        List of length for all sublist in data
-    n : bool 
-        Lenght of total background
-    logval : list
-        list of log value for i in [0,n]
-    logp : bool
-        the result should be in log scale
+    x: int 
+        Number of elements x 
+    nl: int 
+        Number of sublists in data
+    set_len: list 
+        List of length for all sublists in data
+    n: bool 
+        Length of total background
+    logval: list
+        List of log value for i in [0,n]
+    logp: bool
+        The result should be with a log scale
 
     Returns
     -------
-    p : float
-        probability 
+    p: float
+        Probability 
         
     Example 
     --------
@@ -404,23 +406,23 @@ def pmvhyper(x:int,nl:int,set_len:list,n,lower_tail:bool=False,logp:bool=False) 
 
     Parameters
     ----------
-    x : int 
-        number of element x 
-    nl : int 
-        Number of sublist in data
-    set_len : list 
-        List of length for all sublist in data
-    n : bool 
-        Lenght of total background
-    lower_tail : bool
-        if True, probability is P[overlap < m], otherwise, P[overlap >= m], where m is the number of elements shared by all sets.
-    logp : bool
-        the result should be in log scale
+    x: int 
+        Number of elements x 
+    nl: int 
+        Number of sublists in data
+    set_len: list 
+        List of length for all sublists in data
+    n: bool 
+        Length of total background
+    lower_tail: bool
+        If True, the probability is P[overlap < m], otherwise, P[overlap >= m], where m is the number of elements shared by all sets.
+    logp: bool
+        The result should be with a log scale
 
     Returns
     -------
-    p : float
-        probability 
+    p: float
+        Probability 
     """
     tiny = 1.0 * 10**308
     i0 = 0
@@ -478,25 +480,25 @@ def cpsets_sim(x:int,set_len:list,n:int,lower_tail:bool=True,logp:bool=False,num
     
     Parameters
     ----------
-    x : int 
-        number of element x 
-    nl : int 
-        Number of sublist in data
+    x: int 
+        Number of elements x 
+    nl: int 
+        Number of sublists in data
     set_len : list 
-        List of length for all sublist in data
-    n : bool 
-        Lenght of total background
-    lower_tail : bool
-        if True, probability is P[overlap < m], otherwise, P[overlap >= m], where m is the number of elements shared by all sets.
-    logp : bool
-        the result should be in log scale
-    number_sim : int
-        number of simulations
+        List of length for all sublists in data
+    n: bool 
+        Length of total background
+    lower_tail: bool
+        If True, the probability is P[overlap < m], otherwise, P[overlap >= m], where m is the number of elements shared by all sets.
+    logp: bool
+        The result should be with a log scale
+    number_sim: int
+        Number of simulations
 
     Returns
     -------
-    p : float
-        probability 
+    p: float
+        Probability 
         
     Example 
     -------
@@ -525,43 +527,36 @@ def cpsets_sim(x:int,set_len:list,n:int,lower_tail:bool=True,logp:bool=False,num
 
 def cpsets(x:int,data:list,n:int,lower_tail:bool=True,logp:bool=False,p_val_sim:bool=False,number_sim:int=100000) -> float:
     """
-    Compute the distribution function of multiset intersection test. 
+    Compute the distribution function of the multiset intersection test. 
     With the possibility to simulate a p-value
     
     Parameters
     ----------
-    x : int 
-        number of element x 
-    data : list 
-        List of sublist of gene 
-    n : bool 
-        Lenght of total background
-    lower_tail : bool
-        if True, probability is P[overlap < m], otherwise, P[overlap >= m], where m is the number of elements shared by all sets.
-    logp : bool
-        the result should be in log scale
+    x: int 
+        Number of elements x 
+    data: list 
+        List of the sublist of gene 
+    n: bool 
+        Length of total background
+    lower_tail: bool
+        If True, the probability is P[overlap < m], otherwise, P[overlap >= m], where m is the number of elements shared by all sets.
+    logp: bool
+        The result should be with a log scale
     number_sim : int
-        number of simulations
+        Number of simulations
 
     Returns
     -------
-    p : float
-        probability 
+    p: float
+        Probability 
         
     Example 
     -------
-    >>> data = 
-    >>> cpsets(
-        2,
-        [
-            ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
-            ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
-            ["H","I","J","K","L","M","N","O","P","Q"]
-        ],
-        1000,
-        True,
-        False
-    )
+    >>> data = [["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
+        ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+        ["H","I","J","K","L","M","N","O","P","Q"]]
+    >>> cpsets(2,data,
+        1000, True,False)
     ... 9.707720779507648e-16
     """
     nl = len(data)
@@ -581,9 +576,9 @@ def prod(data:list,total:int) -> float:
     
     Parameters
     ----------
-    data : list
-        List of sublist of gene
-    total : int
+    data: list
+        List of a sublist of gene
+    total: int
         Total number of gene
 
     Returns
@@ -593,13 +588,10 @@ def prod(data:list,total:int) -> float:
         
     Example 
     -------
-    >>> prod([
-            ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
-            ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
-            ["H","I","J","K","L","M","N","O","P","Q"]
-        ],
-        600
-        )
+    >>> data = [["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
+        ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+        ["H","I","J","K","L","M","N","O","P","Q"]]
+    >>> prod(data, 600)
     ... 0.007083333333333334
     """ 
     res = 1 # bc if it's 0 0*anything = 0 
@@ -613,35 +605,32 @@ def mset (data:list,n:int,lower_tail:bool=True,logp:bool=False) -> dict :
 
     Parameters
     ----------
-    data : list
-        list of genetic sets 
-    n :int 
-        background size
-    lower_tail :bool 
-        if TRUE (default), probability is P[overlap < m], otherwise, P[overlap >= m], where m is the number of elements shared by all sets.
-    logp : bool
-        if TRUE, probabilities p are given as log(p).
+    data: list
+        List of genetic sets 
+    n: int 
+        Background-size
+    lower_tail: bool 
+        If TRUE (default), the probability is P[overlap < m], otherwise, P[overlap >= m], where m is the number of elements shared by all sets.
+    logp: bool
+        If TRUE, probabilities p are given as log(p).
 
     Returns
     -------
     dict 
         A dictionary with the following keys:
-        "Intersection" : int 
-            The number of intersection between all sets
-        "FE" : float 
-            The fold enrichment 
-        "p-value" : float
-            The p-value to have this intersction number randomly generated
+            "Intersection" : int 
+                The number of intersections between all sets
+            "FE" : float 
+                The fold enrichment 
+            "p-value" : float
+                The p-value to have this intersection number randomly generated
     
     Example
     -------
-    >>> mset([
-            ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
-            ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
-            ["H","I","J","K","L","M","N","O","P","Q"]
-        ],
-        1000
-        )
+    >>> data = [["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
+        ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+        ["H","I","J","K","L","M","N","O","P","Q"]]
+    >>> mset(data,1000)
     ... {
         'Intersection': ['L', 'P', 'M', 'Q', 'N', 'O'],
         'FE': 2352.9,
@@ -683,15 +672,15 @@ def mk_barcode_degree(n:int,degree:int or None) -> list :
     
     Parameters
     ----------
-    n : int
-        length of the barcode
-    degree : int
-        Create ony barcode with a given degree
+    n: int
+        Length of the barcode
+    degree: int
+        Create one barcode with a given degree
 
     Returns
     -------
-    res : list
-        A list of barcode with the given degree
+    res: list
+        A list of barcodes with the given degree
     
     Example
     -------
@@ -726,29 +715,26 @@ def mk_barcode_degree(n:int,degree:int or None) -> list :
 
 def inc_intersect(x:list,degree:int) -> pd.DataFrame : 
     """
-    Calculate the number of intersection for a given degree for all barcodes 
+    Calculate the number of intersections for a given degree for all barcodes 
 
     Parameters
     ----------
-    x : list
-        list of sets 
-    degree : int
-        degree of the intersection (number of sets in the intersection)
+    x: list
+        List of sets 
+    degree: int
+        Degree of the intersection (number of sets in the intersection)
     
     Returns
     -------
     pd.DataFrame
-        A dataframe with each column is a barcode and row is the number of intersection for this barcode 
+        A dataframe with each column is a barcode and the row is the number of intersections for this barcode 
 
     Example
     -------
-    >>> inc_intersect([
-            ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
-            ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
-            ["H","I","J","K","L","M","N","O","P","Q"]
-        ],
-        2
-        )
+    >>> data =  [["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
+        ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+        ["H","I","J","K","L","M","N","O","P","Q"]]
+    >>> inc_intersect(data, 2)
     ...    |    |   011 |   101 |   110 |
     ...    |---:|------:|------:|------:|
     ...    |  0 |     6 |    10 |     6 | 
@@ -783,21 +769,20 @@ def intersect_elements(x:list) -> pd.DataFrame :
 
     Parameters
     ----------
-    x : list
-        list of sets
+    x: list
+        List of sets
     
     Returns
     -------
     pd.DataFrame
-        A dataframe with the entry and the barcode as column and rows
+        A dataframe with the entry and the barcode as columns and rows
 
     Example
     -------
-    >>> intersect_elements([
-            ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
-            ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
-            ["H","I","J","K","L","M","N","O","P","Q"]
-        ]).head()
+    >>> data = [["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
+        ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+        ["H","I","J","K","L","M","N","O","P","Q"]]
+    >>> intersect_elements(data).head()
     ...    |    | entry   |   barcode |
     ...    |---:|:--------|----------:|
     ...    |  0 | Y       |       010 |
@@ -832,24 +817,23 @@ def intersect_elements(x:list) -> pd.DataFrame :
 
 def exclusive_intersect0(x:list) -> pd.DataFrame : 
     """
-    Calculate the number of exclusive intersection for all barcodes
+    Calculate the number of exclusive intersections for all barcodes
     Parameters
     ----------
-    x : list
-        list of sets
+    x: list
+        List of sets
     
     Returns
     -------
     pd.DataFrame
-        A dataframe with each column is a barcode and row is the number of exclusive intersection for this barcode
+        A dataframe with each column is a barcode and the row is the number of exclusive intersections for this barcode
     
     Example
     -------
-    >>> exclusive_intersect0([
-            ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
-            ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
-            ["H","I","J","K","L","M","N","O","P","Q"]
-        ])
+    >>> data = [["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
+        ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+        ["H","I","J","K","L","M","N","O","P","Q"]]
+    >>> exclusive_intersect0(data)
     ...    |    |   001 |   010 |   011 |   100 |   101 |   110 |   111 |
     ...    |---:|------:|------:|------:|------:|------:|------:|------:|
     ...    |  0 |     0 |     9 |     0 |     7 |     4 |     0 |     6 |
@@ -865,25 +849,25 @@ def exclusive_intersect0(x:list) -> pd.DataFrame :
 
 def exc2inc_intersect(df:pd.DataFrame) -> pd.DataFrame : 
     """
-    Calculate the number of intersection (exclusive plus inclusive) for all barcodes
+    Calculate the number of intersections (exclusive plus inclusive) for all barcodes
 
     Parameters
     ----------
     df : pd.DataFrame
-        A dataframe with each column is a barcode and row is the number of exclusive intersection for this barcode
+        A dataframe with each column is a barcode and the row is the number of exclusive intersections for this barcode
 
     Returns
     -------
     pd.DataFrame
-        A dataframe with each column is a barcode and row is the number of intersection for this barcode
+        A dataframe with each column is a barcode and the row is the number of intersections for this barcode
     
     Example
     -------
-    >>> exc2inc_intersect(exclusive_intersect0([
-            ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
-            ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
-            ["H","I","J","K","L","M","N","O","P","Q"]
-        ]))
+    >>> data = [["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
+        ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+        ["H","I","J","K","L","M","N","O","P","Q"]]
+    >>> intersect = exclusive_intersect0(data)
+    >>> exc2inc_intersect(intersect)
     ...    |    |   001 |   010 |   011 |   100 |   101 |   110 |   111 |
     ...    |---:|------:|------:|------:|------:|------:|------:|------:|
     ...    |  0 |    10 |    15 |     6 |    17 |    10 |     6 |     6 |
@@ -904,29 +888,26 @@ def exc2inc_intersect(df:pd.DataFrame) -> pd.DataFrame :
 
 def enumerate_intersect_sizes(x:list,degree:int=-1) -> pd.DataFrame : 
     """
-    Get a table with the number of intersection for each barcode of a given degree
+    Get a table with the number of intersections for each barcode of a given degree
 
     Parameters
     ----------
-    x : list
-        list of sets
-    degree : int
+    x: list
+        List of sets
+    degree: int
         The degree of the barcode
     
     Returns
     -------
     pd.DataFrame
-        A dataframe with each column is a barcode and row is the number of intersection for this barcode
+        A dataframe with each column is a barcode and the row is the number of intersections for this barcode
     
     Example
     -------
-    >>> enumerate_intersect_sizes([
-            ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
-            ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
-            ["H","I","J","K","L","M","N","O","P","Q"]
-        ],
-        degree=2
-        )
+    >>> data = [["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
+        ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+        ["H","I","J","K","L","M","N","O","P","Q"]]
+    >>> enumerate_intersect_sizes(data, degree=2)
     ...    |    |   011 |   101 |   110 |
     ...    |---:|------:|------:|------:|
     ...    |  0 |     6 |    10 |     6 |
@@ -943,11 +924,11 @@ def formating(barcode,names,collapse=' & ') -> str :
 
     Parameters
     ----------
-    barcode : str
+    barcode: str
         The barcode to format
-    names : list
+    names: list
         The list of names to use
-    collapse : str
+    collapse: str
         The string to use to collapse the barcode
     
     Returns
@@ -974,35 +955,30 @@ def supertest(data,n:int,names:list=[],degree:int=-1,lower_tail=True) -> pd.Data
     
     Parameters
     ----------
-    data : list
+    data: list
         The data set to use
-    n : int
-        The number of background size
-    names : list
+    n: int
+        The number of background-size
+    names: list
         The list of names to use
-    degree : int
+    degree: int
         The degree of the barcode (if -1, no degree selection)
-    lower_tail : bool
-        if True, probability is P[overlap < m], otherwise, P[overlap >= m], where m is the number of elements shared by all sets.    
+    lower_tail: bool
+        If True, the probability is P[overlap < m], otherwise, P[overlap >= m], where m is the number of elements shared by all sets.    
     
     Returns
     -------
     pd.DataFrame
-        df with all the information computed by the supertest
+        A dataframe with all the information computed by the supertest
     
     Example
     -------
-    >>> supertest(
-        [
-            ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
-            ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
-            ["H","I","J","K","L","M","N","O","P","Q"]
-        ],
-        n=100,
+    >>> data = [["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"],
+        ["L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+        ["H","I","J","K","L","M","N","O","P","Q"]]
+    >>> supertest(data, n=100,degree=-1,
         names=["First","Second","Third"],
-        degree=-1,
-        lower_tail=False
-    )
+        lower_tail=False)
     ...    |     | intersection           |   degree |   observed_overlap |   expected_overlap |   fold_enrichment |    p_value | elements                                          |
     ...    |----:|:-----------------------|---------:|-------------------:|-------------------:|------------------:|-----------:|:--------------------------------------------------|
     ...    | 001 | Third                  |        1 |                 10 |            nan     |         nan       | nan        | H, I, J, K, L, M, N, O, P, Q                      |
@@ -1109,16 +1085,16 @@ def decode(barcode,name) :
     
     Parameters
     ----------
-    barcode : str
+    barcode: str
         Barcode to decode
-    name : list
+    name: list
         List of names of the sets
     
     Returns
     -------
-    res_pres : list
+    res_pres: list
         List of sets in which the barcode is present
-    res_abs : list
+    res_abs: list
         List of sets in which the barcode is not present
     
     Examples
