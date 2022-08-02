@@ -1,4 +1,1 @@
-from .basic import (
-    color_map_color,
-    plot
-    )
+from .basic import color_map_color, plot
