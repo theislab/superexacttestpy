@@ -3,7 +3,7 @@ data("eqtls")
 (length.gene.sets = sapply(cis.eqtls,length))
 total = 18196
 (p = sapply(0:101,function(i) dpsets(i, length.gene.sets, n=total)))
-print(p) 
+print(p)
 
 common.genes = intersect(cis.eqtls[[1]], cis.eqtls[[2]], cis.eqtls[[3]], cis.eqtls[[4]])
 print(common.genes)
