@@ -14,16 +14,16 @@ names = ["Set1","Set2","Set3"]
 background_size = 1000
 ```
 
-If you just want the df with the results, you can use the function `s.tl.supertest()`
+If you just want the df with the results, you can use the function `stest.tl.supertest()`
 
 ```python
-s.tl.supertest(data=data, n=background_size, names=names)
+stest.tl.supertest(data=data, n=background_size, names=names)
 ```
 
-If you want to get the df and plot the results, you can use the function `s.pl.plot()`
+If you want to get the df and plot the results, you can use the function `stest.pl.plot()`
 
 ```python
-s.pl.plot(data=data, n=background_size, names=names)
+stest.pl.plot(data=data, n=background_size, names=names)
 ```
 
 ```{image} _static/output_example/supertest.png
