@@ -1,18 +1,22 @@
 ```{eval-rst}
-.. module:: superexacttestpy 
+.. module:: superexacttestpy
 ```
 
 ```{eval-rst}
 .. automodule:: superexacttestpy
-    :noindex: 
+    :noindex:
 ```
+
 # API
+
 ```
-import superexacttestpy as stest 
+import superexacttestpy as stest
 ```
 
 ## Tools: `tl`
-Here you will find the documentation of the supertest function. 
+
+Here you will find the documentation of the supertest function.
+
 ```{eval-rst}
 .. module:: superexacttestpy.tl
 .. currentmodule:: superexacttestpy
@@ -54,7 +58,8 @@ Here you will find all the useful functions to perform the superexacttest.
 ```
 
 ## Plotting
-You will find the function to plot the results 
+
+You will find the function to plot the results
 
 ```{eval-rst}
 .. module:: superexacttestpy.pl
