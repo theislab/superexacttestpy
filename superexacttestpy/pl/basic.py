@@ -1,5 +1,5 @@
-from anndata import AnnData
 import upsetplot as upset
+import pandas as pd 
 from matplotlib.colors import Normalize,rgb2hex
 from matplotlib.cm import get_cmap
 import matplotlib.pyplot as plt
@@ -7,7 +7,30 @@ import superexacttestpy as stest
 from math import log
 import matplotlib
 
+def color_map_color(value, cmap_name='YlOrRd', vmin=0, vmax=1):
+    """
+    Create a color map from a given value
 
+    Parameters
+    ----------
+    value : float
+        Value to map
+    cmap_name : str
+        Name of the color palette 
+    vmin : float
+        Minimum value of the color map
+    vmax : float
+        Maximum value of the color map
+    
+    Returns
+    -------
+    str
+        Hexadecimal color code
+    
+    Example
+    -------
+    >>> color_map_color(0.5, cmap_name='YlOrRd', vmin=0, vmax=1)
+    ... '#fd8c3c'
 
 def basic_plot(adata: AnnData) -> int:
     """Generate a basic plot for an AnnData object."""
@@ -16,7 +39,7 @@ def basic_plot(adata: AnnData) -> int:
 
 
 def color_map_color(value, cmap_name='YlOrRd', vmin=0, vmax=1):
-    if value == 0 :
+    if value == 0 : 
         return '#CACACA'
     norm = Normalize(vmin=vmin, vmax=vmax)
     cmap = get_cmap(cmap_name)  # PiYG
@@ -41,26 +64,63 @@ def get_specific_color_gradient(colormap,inputList,**kwargs):
     colorList=scalarMap.to_rgba(inputList)
     return scalarMap,colorList
 
-def plot(data: list, n: int, name: list, degree=-1, sort_by="degree", show_count=True, orientation: str = "horizontal",
-         color_p_val: bool = True, size: tuple = (10, 5), background_color: str = "dark_background", vmax=None):
+def plot(
+    data:list,
+    n:int,
+    name:list,
+    degree=-1,
+    sort_by="degree",
+    show_count=True,
+    orientation:str="horizontal",
+    color_p_val:bool=True,
+    size:tuple=(10,5),
+    background_color:str="seaborn-notebook"
+    ) -> pd.DataFrame :
     """
-        data (list) : list of sets
-        n : background size
-        name (list) : list of name of each sets
-        sort_by (str): degree(default) or cardinality
-        show_count (bool): The overlap at the top of each bar
-        orientation (str) : horizontal or vertical
-        color_p_val (bool): Coloration of bars with their p-value
-        show_elements (bool) : The element of each intersection is show
-        background_color (str) : Set the backgrund color : default = "dark_background" other possibility : see `style.available` for list of available styles
-    """
-    if type(degree) == list:
-        df = stest.tl.supertest(data, n, name, degree=-1, lower_tail=True)
-        df
+    Plot the results of the superexact test
+
+    Parameters
+    ----------
+    data : list
+        List of data to compute with superexact test
+    n : int
+        Background size
+    name : list
+        List of names of each set 
+    degree : int
+        Intersection degree
+    sort_by : str
+        Sort the results by "degree" or "cardinality"
+    show_count : bool
+        Show the number of genes in each set
+    orientation : str
+        Orientation of the plot. "horizontal" or "vertical" 
+    color_p_val : bool
+        Color the bars by their p-value
+    size : tuple
+        Size of the plot
+    background_color : str
+        Background color of the plot. 
+        Default = "seaborn-notebook" other possibility : 
+            see `style.available` for list of available styles
+    
+    Returns
+    -------
+    df : pd.DataFrame
+        Dataframe with the results of the superexact test 
+
+    Example
+    -------
+    >>> plot(data, n, name, degree=-1, sort_by="degree", show_count=True, orientation="horizontal", color_p_val=True, size=(10,5), background_color="dark_background")
+    ... None
+    
+    """ 
+    if type(degree)==list : 
+        df = stest.tl.supertest(data,n,name,degree=-1,lower_tail=True)
         df = df[df['degree'].isin(degree)]
-    elif type(degree) == int:
-        df = stest.tl.supertest(data, n, name, degree, lower_tail=True)
-    else:
+    elif type(degree)==int : 
+        df = stest.tl.supertest(data,n,name,degree,lower_tail=True)
+    else : 
         print("degree should be a list or an int")
         return False
 
@@ -79,7 +139,18 @@ def plot(data: list, n: int, name: list, degree=-1, sort_by="degree", show_count
     for nb in list(df["Observed_overlap"]):
         res_overlap.append(nb)
     plot_data = upset.from_memberships(res_intersect, res_overlap)
-
+    for elem in list(df["intersection"]) :
+        if " & " in elem: 
+            elem = elem.split()
+            elem = list(filter(lambda a: a != "&", elem)) # remouve the & 
+            res_intersect += [elem]
+            
+        else : 
+            res_intersect += [[elem]]
+    
+    for nb in list(df["observed_overlap"]) : 
+        res_overlap.append(nb)
+    plot_data = upset.from_memberships(res_intersect,res_overlap)
     fig = plt.figure(figsize=size)
     ax = plt.subplot()
     if show_count:
@@ -100,6 +171,25 @@ def plot(data: list, n: int, name: list, degree=-1, sort_by="degree", show_count
         for code in list(df.index):
             tmp = list(df["p-value"].loc[[code]])[0]
             if tmp == None:
+    else : 
+        show_count = None
+
+    #Construct the plot 
+    res = upset.UpSet(
+        plot_data,
+        element_size=None,
+        orientation=orientation,
+        sort_by=sort_by,
+        show_counts=show_count,
+        intersection_plot_elements=20,
+        subset_size="auto"
+        )
+        
+    if color_p_val : 
+        p_val = []
+        for code in list(df.index) :
+            tmp = list(df["p_value"].loc[[code]])[0]
+            if tmp == None : 
                 p_val.append(0)
             elif tmp > 0:
                 p_val.append(-round(log(float(tmp), 10), 2))
@@ -132,3 +222,14 @@ def plot(data: list, n: int, name: list, degree=-1, sort_by="degree", show_count
     plt.axis('off')
     cbar = fig.colorbar(scalarmap, orientation="vertical", format="%.0f", ticks=tickscolorbar, ax=ax, anchor=(1.0, 1.0))
     cbar.set_label(r'$-log_{10}(P_{val})$', fontsize=12)
+        vmax = max(p_val)+1/3*max(p_val)
+        for i,val in enumerate (list(df.index)) : 
+            col = color_map_color(p_val[i],vmax=vmax)
+            pres,abs = stest.tl.decode(val,name)
+            res.style_subsets(present = pres, absent=abs,facecolor=col,label=f"-log10(p_value) = {p_val[i]}")
+            res.style_subsets()
+    with plt.style.context(background_color) :
+        res.plot(fig = fig)
+    plt.suptitle("test")
+    plt.show()
+    return df

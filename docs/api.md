@@ -1,30 +1,65 @@
-# API
-
-## Preprocessing
-
 ```{eval-rst}
-.. module:: superexacttestpy.pp
-.. currentmodule:: superexacttestpy
-
-.. autosummary::
-    :toctree: generated
-
-    pp.basic_preproc
+.. module:: superexacttestpy
 ```
 
-## Tools
+```{eval-rst}
+.. automodule:: superexacttestpy
+    :noindex:
+```
+
+# API
+
+```
+import superexacttestpy as stest
+```
+
+## Tools: `tl`
+
+Here you will find the documentation of the supertest function.
 
 ```{eval-rst}
 .. module:: superexacttestpy.tl
 .. currentmodule:: superexacttestpy
 
 .. autosummary::
-    :toctree: generated
+    :toctree: generated/
 
-    tl.basic_tool
+    tl.supertest
+```
+
+Here you will find all the useful functions to perform the superexacttest.
+
+```{eval-rst}
+.. module:: superexacttestpy.tl
+.. currentmodule:: superexacttestpy
+
+.. autosummary::
+    :toctree: generated/
+
+    tl.len_data
+    tl.log_choose
+    tl.dmv_hyper
+    tl.dhyper
+    tl.dp_sets
+    tl.intersect
+    tl.dmv_hyper_logval
+    tl.cpsets_sim
+    tl.cpsets
+    tl.mset
+    tl.mk_barcode_degree
+    tl.inc_intersect
+    tl.intersect_elements
+    tl.exclusive_intersect0
+    tl.exc2inc_intersect
+    tl.enumerate_intersect_sizes
+    tl.formating
+    tl.supertest
+    tl.decode
 ```
 
 ## Plotting
+
+You will find the function to plot the results
 
 ```{eval-rst}
 .. module:: superexacttestpy.pl
@@ -33,5 +68,6 @@
 .. autosummary::
     :toctree: generated
 
-    pl.basic_plot
+    pl.color_map_color
+    pl.plot
 ```
