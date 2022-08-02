@@ -19,7 +19,7 @@ sys.path.insert(0, str(HERE / "extensions"))
 info = metadata("superexacttestpy")
 project = info["Name"]
 author = info["Author"]
-copyright = f"{datetime.now():%Y}, {author}."
+copyright = f"{datetime.now():%Y}, {author}"
 version = info["Version"]
 
 # The full version, including alpha/beta/rc tags
@@ -83,8 +83,9 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints"]
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "furo"
+html_theme = "scanpydoc"
 html_static_path = ["_static"]
+html_css_files = ["custom.css"]
 
 pygments_style = "sphinx"
 
