@@ -93,7 +93,17 @@ If you found a bug, please use the [issue tracker][issue-tracker].
 
 ## Citation
 
-> t.b.a
+for cite superexactestpy, please use the following: 
+```bibtex
+@software{superexacttest,
+  author = {Ibarra, Mauger-Birocheau}},
+  doi = {},
+  month = {},
+  title = {{superexacttest}},
+  url = {https://github.com/theislab/superexacttestpy},
+  year = {2022}
+}
+```
 
 [scverse-discourse]: https://discourse.scverse.org/
 [issue-tracker]: https://github.com/ilibarra/superexacttestpy/issues
