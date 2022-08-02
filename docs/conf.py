@@ -95,6 +95,13 @@ nitpick_ignore = [
     #     ("py:class", "igraph.Graph"),
 ]
 
+intersphinx_mapping = dict(
+    matplotlib=("https://matplotlib.org/stable", None),
+    numpy=("https://numpy.org/doc/stable/", None),
+    pandas=("https://pandas.pydata.org/pandas-docs/stable/", None),
+    upsetplot=("https://upsetplot.readthedocs.io/en/stable/",None), 
+    python=("https://docs.python.org/3", None), 
+)
 
 def setup(app):
     """App setup hook."""
