@@ -113,7 +113,7 @@ for cite superexactestpy, please use the following:
 
 ```bibtex
 @software{superexacttest,
-  author = {Ibarra, Mauger-Birocheau}},
+  author = {Ibarra, Mauger-Birocheau},
   doi = {},
   month = {},
   title = {{superexacttest}},

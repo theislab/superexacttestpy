@@ -30,10 +30,10 @@ def color_map_color(value, cmap_name='YlOrRd', vmin=0, vmax=1):
     Example
     -------
     >>> color_map_color(0.5, cmap_name='YlOrRd', vmin=0, vmax=1)
-    ... '#fd8c3c'
+    ... "#fd8c3c"
+
     """
 
-def color_map_color(value, cmap_name='YlOrRd', vmin=0, vmax=1):
     if value == 0 :
         return '#CACACA'
     norm = Normalize(vmin=vmin, vmax=vmax)
@@ -77,28 +77,28 @@ def plot(
 
     Parameters
     ----------
-    data : list
+    data: list
         List of data to compute with superexact test
-    n : int
+    n: int
         Background size
-    name : list
+    name: list
         List of names of each set
-    degree : int
+    degree: int
         Intersection degree
-    sort_by : str
+    sort_by: str
         Sort the results by "degree" or "cardinality"
-    show_count : bool
+    show_count: bool
         Show the number of genes in each set
-    orientation : str
+    orientation: str
         Orientation of the plot. "horizontal" or "vertical"
-    color_p_val : bool
+    color_p_val: bool
         Color the bars by their p-value
-    size : tuple
+    size: tuple
         Size of the plot
-    background_color : str
+    background_color: str
         Background color of the plot.
         Default = "seaborn-notebook" other possibility :
-            see `style.available` for list of available styles
+        see `style.available` for list of available styles
 
     Returns
     -------
