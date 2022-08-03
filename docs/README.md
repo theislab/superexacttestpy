@@ -63,13 +63,17 @@ background_size = 1000
 If you just want the df with the results, you can use the function `stest.tl.supertest()`
 
 ```python
-stest.tl.supertest(data=data, n=background_size, names=names)
+stest.tl.supertest(data=data, n=background_size, names=names).head()
+```
+
+```{image} _static/output_example/df.jpg
+
 ```
 
 The function supertest has some optional arguments:
 
--   degree: the degree of the intersection you want to compute.
--   lower_tail: Let m be the number of elements shared in the sets : if True, p = P[overlap < m] and if False, p = P[overlap >= m].
+-   `degree`: the degree of the intersection you want to compute.
+-   `lower_tail`: Let m be the number of elements shared in the sets : if True, p = P[overlap < m] and if False, p = P[overlap >= m].
 
 If you want to get the df and plot the results, you can use the function `stest.pl.plot()`
 
@@ -79,11 +83,11 @@ stest.pl.plot(data=data, n=background_size, names=names)
 
 The function plot has some optional arguments:
 
--   degree: the degree of the intersection you want to compute.
--   sort_by: on what you want to sort the bars "degree" or "p_val"
--   show_count: if True, the number of genes in the intersection is shown.
--   size: tuple of the figsize
--   background_color: the color of the background of the plot.
+-   `degree`: the degree of the intersection you want to compute.
+-   `sort_by`: on what you want to sort the bars "degree" or "p_val"
+-   `show_count`: if True, the number of genes in the intersection is shown.
+-   `size`: tuple of the figsize
+-   `background_color`: the color of the background of the plot.
 
 ```{image} _static/output_example/supertest.png
 
@@ -93,7 +97,7 @@ Plotting function output
 
 ### Side function
 
-Some sides functions are available and will be described in the [readthedocs][link-api]
+Some additional functions are available and will be described in the [readthedocs][link-api]
 
 ## Installation
 
@@ -113,7 +117,7 @@ pip install superexacttestpy
 1. Install the latest development version:
 
 ```bash
-pip install git+https://github.com/ilibarra/superexacttestpy.git@main
+pip install git+https://github.com/theislab/superexacttestpy.git@main
 ```
 
 ## Release notes
@@ -141,8 +145,8 @@ for cite superexactestpy, please use the following:
 ```
 
 [scverse-discourse]: https://discourse.scverse.org/
-[issue-tracker]: https://github.com/ilibarra/superexacttestpy/issues
-[changelog]: https://superexacttestpy.readthedocs.io/latest/changelog.html
-[link-docs]: https://superexacttestpy.readthedocs.io
-[link-api]: https://superexacttestpy.readthedocs.io/latest/api.html
+[issue-tracker]: https://github.com/theislab/superexacttestpy/issues
+[changelog]: https://superexacttestpy.readthedocs.io/en/latest/changelog.html
+[link-docs]: https://superexacttestpy.readthedocs.io/en/latest/#
+[link-api]: https://superexacttestpy.readthedocs.io/en/latest/api.html
 [r-package]: https://github.com/mw201608/SuperExactTest
