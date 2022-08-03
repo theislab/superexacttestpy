@@ -32,7 +32,25 @@ import superexacttestpy as stest
 For example, we want to make the test on this fictive set:
 
 ```python
-Set1 = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"]
+Set1 = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+]
 Set2 = ["L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 Set3 = ["H", "I", "J", "K", "L", "M", "N", "O", "P", "Q"]
 

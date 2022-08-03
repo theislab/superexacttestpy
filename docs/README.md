@@ -32,7 +32,25 @@ import superexacttestpy as stest
 For example, we want to make the test on this fictive set:
 
 ```python
-Set1 = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"]
+Set1 = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+]
 Set2 = ["L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 Set3 = ["H", "I", "J", "K", "L", "M", "N", "O", "P", "Q"]
 
@@ -51,7 +69,6 @@ stest.tl.supertest(data=data, n=background_size, names=names).head()
 ```{image} _static/output_example/df.jpg
 
 ```
-
 
 The function supertest has some optional arguments:
 
@@ -79,6 +96,7 @@ The function plot has some optional arguments:
 Plotting function output
 
 ### Side function
+
 Some additional functions are available and will be described in the [readthedocs][link-api]
 
 ## Installation

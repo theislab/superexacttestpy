@@ -87,16 +87,17 @@ pygments_style = "sphinx"
 nitpick_ignore = [
     # If building the documentation fails because of a missing link that is outside your control,
     # you can add an exception to this list.
-        ("py:class", "pd.DataFrame"),
+    ("py:class", "pd.DataFrame"),
 ]
 
 intersphinx_mapping = dict(
     matplotlib=("https://matplotlib.org/stable", None),
     numpy=("https://numpy.org/doc/stable/", None),
     pandas=("https://pandas.pydata.org/pandas-docs/stable/", None),
-    upsetplot=("https://upsetplot.readthedocs.io/en/stable/",None), 
-    python=("https://docs.python.org/3", None), 
+    upsetplot=("https://upsetplot.readthedocs.io/en/stable/", None),
+    python=("https://docs.python.org/3", None),
 )
+
 
 def setup(app):
     """App setup hook."""
