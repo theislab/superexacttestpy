@@ -46,15 +46,12 @@ If you just want the df with the results, you can use the function `stest.tl.sup
 
 ```python
 stest.tl.supertest(data=data, n=background_size, names=names).head()
-
-|      | intersection   |   degree |   observed_overlap |   expected_overlap |   fold_enrichment |        p_value | elements           |
-|-----:|:---------------|---------:|-------------------:|-------------------:|------------------:|---------------:|--------------------|
-| 0001 | PONS           |        1 |                101 |         nan        |          nan      | nan            | AATF, ABHD12, ...  |
-| 0010 | TC             |        1 |                137 |         nan        |          nan      | nan            | ABHD12, ACCS, ...  |
-| 0011 | TC & PONS      |        2 |                 72 |           0.760442 |           94.6818 |   2.09933e-138 | ABHD12, ACCS, ...  |
-| 0100 | FC             |        1 |                164 |         nan        |          nan      | nan            | ABHD12, ADAD2, ... |
-| 0101 | FC & PONS      |        2 |                 74 |           0.91031  |           81.291  |   3.3931e-136  | ABHD12, AMFR, ...  |
 ```
+
+```{image} _static/output_example/df.jpg
+
+```
+
 
 The function supertest has some optional arguments:
 
@@ -82,8 +79,7 @@ The function plot has some optional arguments:
 Plotting function output
 
 ### Side function
-
-Some additional function are available and will be described in the [readthedocs][link-api]
+Some additional functions are available and will be described in the [readthedocs][link-api]
 
 ## Installation
 
