@@ -124,7 +124,7 @@ for cite superexactestpy, please use the following:
 
 [scverse-discourse]: https://discourse.scverse.org/
 [issue-tracker]: https://github.com/ilibarra/superexacttestpy/issues
-[changelog]: https://superexacttestpy.readthedocs.io/latest/changelog.html
-[link-docs]: https://superexacttestpy.readthedocs.io
-[link-api]: https://superexacttestpy.readthedocs.io/latest/api.html
+[changelog]: https://superexacttestpy.readthedocs.io/en/latest/changelog.html
+[link-docs]: https://superexacttestpy.readthedocs.io/en/latest/#
+[link-api]: https://superexacttestpy.readthedocs.io/en/latest/api.html
 [r-package]: https://github.com/mw201608/SuperExactTest
