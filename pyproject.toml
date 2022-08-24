@@ -25,7 +25,7 @@ version = "0.0.1"
 requires-python = ">=3.8"
 license = {file = "LICENSE"}
 readme = "README.md"
-dependencies = ["anndata","upsetplot"]
+dependencies = ["anndata","UpSetPlot"]
 
 [project.optional-dependencies]
 dev = [
