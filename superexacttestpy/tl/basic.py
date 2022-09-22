@@ -1017,12 +1017,17 @@ def supertest(data, n: int, names: list = [], degree: int = -1, lower_tail=True)
     ...    | 111 | First & Second & Third |        3 |                  6 |              0.255 |          23.5294  |   1        | L, M, N, O, P, Q                                  |
 
     """
+    deg_modif = False 
+
     if type(data) != list:
         print("Input must be a list")
         return False
     if len(names) != len(data):
         for i in range(len(data)):
             names.append(f"Set{i + 1}")
+    if type(degree) == list : 
+        deg_modif = degree
+        degree = -1 
 
     x = data
     size = [len(list(set(x[i]))) for i in range(len(x))]
@@ -1060,18 +1065,18 @@ def supertest(data, n: int, names: list = [], degree: int = -1, lower_tail=True)
                 p_val[idx] = cpsets(list(df_overlap_size.loc[0])[idx] - 1, L, n, lower_tail=lower_tail)
 
     nl = len(x)
-    if type(degree) == int:
-        if degree <= 0:
+    if type(degree) == int :
+        if degree <= 0 :
             degree = [i for i in range(nl)]
 
-    elif type(degree) == list:
-        for d in degree:
-            if d < 1 or d > nl:
-                print("Invalid degree value")
-                return False
-    else:
-        print("Degree should be a list of int or an int")
-        return False
+    # elif type(degree) == list :
+    #     for d in degree :
+    #         if d < 1 or d > nl :
+    #             print("Invalid degree value")
+    #             return False
+    # else:
+    #     print("Degree should be a list of int or an int")
+    #     return False
     odegree = [i.count("1") for i in barcode]
     otab = exc2inc_intersect(exclusive_intersect0(x))
     otab = [int(otab[code]) for code in barcode]
@@ -1116,6 +1121,10 @@ def supertest(data, n: int, names: list = [], degree: int = -1, lower_tail=True)
         }
     )
     res.index = barcode
+
+    if deg_modif != False and type(deg_modif) == list : 
+        res = res[res["degree"].isin(deg_modif)]
+    
     return res
 
 
