@@ -976,7 +976,7 @@ def formating(barcode, names, collapse=" & ") -> str:
     return collapse.join(res)
 
 
-def supertest(data, n: int, names: list = [], degree: int = -1, lower_tail=True) -> pd.DataFrame:
+def supertest(data, n: int, names: list = [], degree: int or list = -1, lower_tail=True) -> pd.DataFrame:
     """
     Calculate the supertest for a given data set
 
@@ -988,8 +988,8 @@ def supertest(data, n: int, names: list = [], degree: int = -1, lower_tail=True)
         The number of background-size
     names: list
         The list of names to use
-    degree: int
-        The degree of the barcode (if -1, no degree selection)
+    degree: int or list 
+        The degree (or list of degree) of the barcode (if -1, no degree selection)
     lower_tail: bool
         If True, the probability is P[overlap < m], otherwise, P[overlap >= m], where m is the number of elements shared by all sets.
 
